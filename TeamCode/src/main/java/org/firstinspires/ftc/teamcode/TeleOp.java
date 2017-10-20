@@ -12,7 +12,7 @@ public class TeleOp extends LinearOpMode
 
     DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB;
     Float left, right;
-    double x;
+    
 
     @Override
     public void runOpMode() throws InterruptedException
