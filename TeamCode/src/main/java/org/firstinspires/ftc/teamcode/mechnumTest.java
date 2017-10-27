@@ -61,12 +61,12 @@ public class mechnumTest extends LinearOpMode {
                 leftRight = true;
             }
             //forward
-            if (((Math.PI/4 <= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) <= (Math.PI)/2)) && leftRight == true) {
+            if (((Math.PI/4 < Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) < (Math.PI)/2)) && leftRight == true) {
                 leftDriveF.setPower(magnitude);
                 leftDriveB.setPower(magnitude);
             }
 
-            else if (((Math.PI/4 <= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) <= (Math.PI)/2)) && leftRight == false) {
+            else if (((Math.PI/4 < Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) < (Math.PI)/2)) && leftRight == false) {
                 leftDriveF.setPower(magnitude);
                 leftDriveB.setPower(magnitude);
             }
@@ -84,12 +84,12 @@ public class mechnumTest extends LinearOpMode {
             }
 
             //back
-            else if (((-Math.PI/4 >= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) >= (-Math.PI)/2)) && leftRight == true) {
+            else if (((-Math.PI/4 > Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/2)) && leftRight == true) {
                 leftDriveF.setPower(-magnitude);
                 leftDriveB.setPower(-magnitude);
             }
 
-            else if (((-Math.PI/4 >= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) >= (-Math.PI)/2)) && leftRight == false) {
+            else if (((-Math.PI/4 > Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/2)) && leftRight == false) {
                 leftDriveF.setPower(-magnitude);
                 leftDriveB.setPower(-magnitude);
             }
