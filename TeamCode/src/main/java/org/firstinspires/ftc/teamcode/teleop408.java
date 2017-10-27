@@ -21,11 +21,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  */
 
 @TeleOp(name="TeleOperations", group="Linear Opmode")
+@Disabled
 public class teleop408 extends LinearOpMode
 {
 
+
     //Create variables and hardware
-    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB;
+    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator;
     Float left, right;
 
 
@@ -38,17 +40,18 @@ public class teleop408 extends LinearOpMode
         leftDriveF = hardwareMap.dcMotor.get("leftDriveF");
         leftDriveB = hardwareMap.dcMotor.get("leftDriveB");
 
-        leftDriveB.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftDriveF.setDirection(DcMotorSimple.Direction.REVERSE);
-
+       //leftDriveB.setDirection(DcMotorSimple.Direction.REVERSE);
+        //leftDriveF.setDirection(DcMotorSimple.Direction.REVERSE);
+//gamepad1.dpadup
         rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
         rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
+
+        elevator = hardwareMap.dcMotor.get("elevator");
 
 
         waitForStart(); //Program is setup by everything above this, wait until play is pressed on the phone
 
-        while (opModeIsActive())
-        {
+        while (opModeIsActive()) {
             //Assign values to the doubles using the gamepad values
             left = -gamepad1.left_stick_y;
             right = gamepad1.right_stick_y;
@@ -58,6 +61,17 @@ public class teleop408 extends LinearOpMode
             leftDriveB.setPower(left);
             rightDriveF.setPower(right);
             rightDriveB.setPower(right);
+
+            if (gamepad1.dpad_up == true) {
+                elevator.setPower(1);
+            } else if (gamepad1.dpad_down == true) {
+                elevator.setPower(1);
+            } else {
+                elevator.setPower(0);
+            }
+
         }
+
+
     }
 }
