@@ -69,6 +69,7 @@ public class auto extends LinearOpMode
 
     public int tickstomm(int ticks)
     {
+        double x = 3;
         return 0;
     }
 }
