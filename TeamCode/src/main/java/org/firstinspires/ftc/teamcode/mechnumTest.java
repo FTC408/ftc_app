@@ -36,15 +36,6 @@ public class mechnumTest extends LinearOpMode {
 
         while (opModeIsActive())
         {
-            //Assign values to the doubles using the gamepad values
-            left = -gamepad1.left_stick_y;
-            right = gamepad1.right_stick_y;
-
-            //Assign power values to the motors, using the values we just made with the gamepad lines
-            leftDriveF.setPower(left);
-            leftDriveB.setPower(left);
-            rightDriveF.setPower(right);
-            rightDriveB.setPower(right);
 
             double magnitude = Math.sqrt(Math.pow(gamepad1.left_stick_y,2)+Math.pow(gamepad1.left_stick_x,2));
 
@@ -52,20 +43,20 @@ public class mechnumTest extends LinearOpMode {
             double x2 = gamepad1.right_stick_x;
             boolean leftRight, rightLeft;
 
-            if (x < 0)
+            if (x < 0) //manipulates the x value so that the inverse tangent will stay within its boundaries
             {
                 x = -x;
-                leftRight = false;
+                leftRight = false; //keeps a record of whether x was positive or negative
             }
             else
             {
                 leftRight = true;
             }
 
-            if (x2 < 0)
+            if (x2 < 0) //manipulates the x value so that the inverse tangent will stay within its boundaries
             {
                 x2 = -x2;
-                rightLeft = false;
+                rightLeft = false; //keeps a record of wheter x was positive or negative
             }
             else
             {
