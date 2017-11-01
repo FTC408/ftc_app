@@ -49,6 +49,7 @@ public class mechnumTest extends LinearOpMode {
             double magnitude = Math.sqrt(Math.pow(gamepad1.left_stick_y,2)+Math.pow(gamepad1.left_stick_x,2));
 
             double x = gamepad1.left_stick_x;
+            double x2 = gamepad1.right_stick_x;
             boolean leftRight, rightLeft;
 
             if (x < 0)
@@ -61,9 +62,9 @@ public class mechnumTest extends LinearOpMode {
                 leftRight = true;
             }
 
-            if (x < 0)
+            if (x2 < 0)
             {
-                x = -x;
+                x2 = -x2;
                 rightLeft = false;
             }
             else
@@ -77,75 +78,77 @@ public class mechnumTest extends LinearOpMode {
                 leftDriveB.setPower(magnitude);
             }
 
-             if (((Math.PI/4 < Math.atan(gamepad1.left_stick_y/x) && Math.atan(gamepad1.left_stick_y/x) < (Math.PI)/2)) && leftRight == false) {
+             else if (((Math.PI/4 < Math.atan(gamepad1.left_stick_y/x) && Math.atan(gamepad1.left_stick_y/x) < (Math.PI)/2)) && leftRight == false) {
                 leftDriveF.setPower(magnitude);
                 leftDriveB.setPower(magnitude);
             }
 
             //L-right
-             if (((Math.PI/4 > Math.atan(gamepad1.left_stick_y/x) && Math.atan(gamepad1.left_stick_y/x) > (-Math.PI)/4)) && leftRight == true) {
+             else if (((Math.PI/4 > Math.atan(gamepad1.left_stick_y/x) && Math.atan(gamepad1.left_stick_y/x) > (-Math.PI)/4)) && leftRight == true) {
                 leftDriveF.setPower(-magnitude);
                 leftDriveB.setPower(magnitude);
             }
 
             //L-left
-             if (((Math.PI/4 > Math.atan(gamepad1.left_stick_y/x) && Math.atan(gamepad1.left_stick_y/x) > (-Math.PI)/4)) && leftRight == false) {
+             else if (((Math.PI/4 > Math.atan(gamepad1.left_stick_y/x) && Math.atan(gamepad1.left_stick_y/x) > (-Math.PI)/4)) && leftRight == false) {
                 leftDriveF.setPower(magnitude);
                 leftDriveB.setPower(-magnitude);
             }
 
             //L-back
-             if (((-Math.PI/4 >= Math.atan(gamepad1.left_stick_y/x) && Math.atan(gamepad1.left_stick_y/x) >= (-Math.PI)/2)) && leftRight == true) {
+             else if (((-Math.PI/4 >= Math.atan(gamepad1.left_stick_y/x) && Math.atan(gamepad1.left_stick_y/x) >= (-Math.PI)/2)) && leftRight == true) {
                 leftDriveF.setPower(-magnitude);
                 leftDriveB.setPower(-magnitude);
             }
 
-             if (((-Math.PI/4 >= Math.atan(gamepad1.left_stick_y/x) && Math.atan(gamepad1.left_stick_y/x) >= (-Math.PI)/2)) && leftRight == false) {
+             else if (((-Math.PI/4 >= Math.atan(gamepad1.left_stick_y/x) && Math.atan(gamepad1.left_stick_y/x) >= (-Math.PI)/2)) && leftRight == false) {
                 leftDriveF.setPower(-magnitude);
                 leftDriveB.setPower(-magnitude);
             }
 
-            else
-                leftDriveF.setPower(0);
-                leftDriveB.setPower(0);
+            else {
+                 leftDriveF.setPower(0);
+                 leftDriveB.setPower(0);
+             }
 
             //R-forward
-            if (((Math.PI/4 < Math.atan(gamepad1.right_stick_y/x) && Math.atan(gamepad1.right_stick_y/x) < (Math.PI)/2)) && rightLeft == true) {
+            if (((Math.PI/4 < Math.atan(gamepad1.right_stick_y/x2) && Math.atan(gamepad1.right_stick_y/x2) < (Math.PI)/2)) && rightLeft == true) {
                 rightDriveF.setPower(magnitude);
                 rightDriveB.setPower(magnitude);
             }
 
-            if (((Math.PI/4 < Math.atan(gamepad1.right_stick_y/x) && Math.atan(gamepad1.right_stick_y/x) < (Math.PI)/2)) && rightLeft == false) {
+            else if (((Math.PI/4 < Math.atan(gamepad1.right_stick_y/x2) && Math.atan(gamepad1.right_stick_y/x2) < (Math.PI)/2)) && rightLeft == false) {
                 rightDriveF.setPower(magnitude);
                 rightDriveB.setPower(magnitude);
             }
 
             //R-right
-            if (((Math.PI/4 > Math.atan(gamepad1.right_stick_y/x) && Math.atan(gamepad1.right_stick_y/x) > (-Math.PI)/4)) && rightLeft == true) {
+            else if (((Math.PI/4 > Math.atan(gamepad1.right_stick_y/x2) && Math.atan(gamepad1.right_stick_y/x2) > (-Math.PI)/4)) && rightLeft == true) {
                 rightDriveF.setPower(-magnitude);
                 rightDriveB.setPower(magnitude);
             }
 
             //R-left
-            if (((Math.PI/4 > Math.atan(gamepad1.right_stick_y/x) && Math.atan(gamepad1.right_stick_y/x) > (-Math.PI)/4)) && rightLeft == false) {
+            else if (((Math.PI/4 > Math.atan(gamepad1.right_stick_y/x2) && Math.atan(gamepad1.right_stick_y/x2) > (-Math.PI)/4)) && rightLeft == false) {
                 rightDriveF.setPower(magnitude);
                 rightDriveB.setPower(-magnitude);
             }
 
             //R-back
-            if (((-Math.PI/4 >= Math.atan(gamepad1.right_stick_y/x) && Math.atan(gamepad1.right_stick_y/x) >= (-Math.PI)/2)) && rightLeft == true) {
+            else if (((-Math.PI/4 >= Math.atan(gamepad1.right_stick_y/x2) && Math.atan(gamepad1.right_stick_y/x2) >= (-Math.PI)/2)) && rightLeft == true) {
                 rightDriveF.setPower(-magnitude);
                 rightDriveB.setPower(-magnitude);
             }
 
-            if (((-Math.PI/4 >= Math.atan(gamepad1.right_stick_y/x) && Math.atan(gamepad1.right_stick_y/x) >= (-Math.PI)/2)) && rightLeft == false) {
+            else if (((-Math.PI/4 >= Math.atan(gamepad1.right_stick_y/x2) && Math.atan(gamepad1.right_stick_y/x2) >= (-Math.PI)/2)) && rightLeft == false) {
                 rightDriveF.setPower(-magnitude);
                 rightDriveB.setPower(-magnitude);
             }
 
-            else
+            else {
                 rightDriveF.setPower(0);
                 rightDriveB.setPower(0);
+            }
 
 
         }
