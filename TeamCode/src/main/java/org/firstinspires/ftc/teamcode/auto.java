@@ -17,6 +17,9 @@ public class auto extends LinearOpMode
     //Create variables and hardware
     DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB;
     Float left, right;
+    double ticksPerRev = 288;
+    double gearRatio = 1.33;
+    double diameter = 101.6;
 
     public void runOpMode() throws InterruptedException
     {
@@ -38,15 +41,11 @@ public class auto extends LinearOpMode
 
         waitForStart();
 
-        forward(1.0);
-        sleep(2000);
-        forward(0);
-
-        leftPower(1.0);
-        rightPower(-1.0);
-        sleep (1000);
-        forward(0);
-
+        /* forward(untill in front of kryptoboc)
+        turn (90)
+        forward(a little more)
+        run lift(2)
+        */
 
 
     }
@@ -69,8 +68,20 @@ public class auto extends LinearOpMode
         rightPower(power);
     }
 
-    public int tickstomm(int ticks)
-    {
-        return 0;
+    public double tickstomm(int ticks){
+
+    double mm = (ticks * 1.4777);
+    return mm;
     }
+
+    public double mmtoticks(double mm)
+    {
+
+        double ticks = (mm / 1.4777);
+        return ticks;
+    }
+
+
+
 }
+
