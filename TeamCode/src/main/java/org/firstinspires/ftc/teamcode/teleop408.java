@@ -1,77 +1,127 @@
 package org.firstinspires.ftc.teamcode;
 
-/**
- * Created by Austin on 10/23/2017.
- */
-
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-//import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 /**
- * Created by Austin on 10/19/2017.
+ * Created by Robotics on 10/26/2017.
  */
-
-@TeleOp(name="TeleOperations", group="Linear Opmode")
-@Disabled
-public class teleop408 extends LinearOpMode
-{
-
-
+@TeleOp(name="TeleOp", group="Linear Opmode")
+public class teleop408 extends LinearOpMode {
+    // Here is a change
     //Create variables and hardware
-    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator;
-    Float left, right;
-
+    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB;
 
     @Override
     public void runOpMode() throws InterruptedException
     {
-
         //Initilization Procedures
         //Configuration in the phone, this allows the motors to control physical objects that the phone is connected to
         leftDriveF = hardwareMap.dcMotor.get("leftDriveF");
         leftDriveB = hardwareMap.dcMotor.get("leftDriveB");
-
-       //leftDriveB.setDirection(DcMotorSimple.Direction.REVERSE);
-        //leftDriveF.setDirection(DcMotorSimple.Direction.REVERSE);
-//gamepad1.dpadup
         rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
         rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
 
-        elevator = hardwareMap.dcMotor.get("elevator");
-
-
         waitForStart(); //Program is setup by everything above this, wait until play is pressed on the phone
 
-        while (opModeIsActive()) {
-            //Assign values to the doubles using the gamepad values
-            left = -gamepad1.left_stick_y;
-            right = gamepad1.right_stick_y;
+        while (opModeIsActive())
+        {
+            //Automatically sets the power of the motors to zero if none of the stuff below is true. This should solve a problem we
+            //Were having on 11/1/2017 where there was a lag between when we would do something on the controller and
+            //When the robot would do it. I think this was because of how if else statements tend to be... binary in nature
+            //And maybe it took the controller a while to catch up.
+            rightDriveF.setPower(0);
+            rightDriveB.setPower(0);
+            leftDriveB.setPower(0);
+            leftDriveF.setPower(0);
 
-            //Assign power values to the motors, using the values we just made with the gamepad lines
-            leftDriveF.setPower(left);
-            leftDriveB.setPower(left);
-            rightDriveF.setPower(right);
-            rightDriveB.setPower(right);
+            //Finds the "hypotenuse" if you will, of the triangle of x and y values that is created when the joystick is moved
+            double magnitudeLeft = Math.sqrt(Math.pow(gamepad1.left_stick_y,2)+Math.pow(gamepad1.left_stick_x,2));
+            double magnitudeRight = Math.sqrt(Math.pow(gamepad1.right_stick_y,2)+Math.pow(gamepad1.right_stick_x,2));
 
-            if (gamepad1.dpad_up == true) {
-                elevator.setPower(1);
-            } else if (gamepad1.dpad_down == true) {
-                elevator.setPower(1);
-            } else {
-                elevator.setPower(0);
+            boolean left, right;
+
+            if (gamepad1.left_stick_x < 0) //Records whether or not x is positive or negative. This helps the program decide
+                left = false;  //Which quadrant the stick is in
+            else
+                left = true;
+
+
+            if (gamepad1.right_stick_x < 0) //Records whether or not x is positive or negative. This helps the program decide
+                right = false;  //Which quadrnat the stick is in
+            else
+                right = true;
+
+
+            //L-forward
+            if (((Math.PI/4 < Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) < (Math.PI)/2)) && left == true) {
+                leftDriveF.setPower(magnitudeLeft);
+                leftDriveB.setPower(magnitudeLeft);
             }
 
+            if (((Math.PI/4 < Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) < (Math.PI)/2)) && left == false) {
+                leftDriveF.setPower(magnitudeLeft);
+                leftDriveB.setPower(magnitudeLeft);
+            }
+
+            //L-right
+            if (((Math.PI/4 > Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/4)) && left == true) {
+                leftDriveF.setPower(-magnitudeLeft);
+                leftDriveB.setPower(magnitudeLeft);
+            }
+
+            //L-left
+            if (((Math.PI/4 > Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/4)) && left == false) {
+                leftDriveF.setPower(magnitudeLeft);
+                leftDriveB.setPower(-magnitudeLeft);
+            }
+
+            //L-back
+            if (((-Math.PI/4 >= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) >= (-Math.PI)/2)) && left == true) {
+                leftDriveF.setPower(-magnitudeLeft);
+                leftDriveB.setPower(-magnitudeLeft);
+            }
+
+            if (((-Math.PI/4 >= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) >= (-Math.PI)/2)) && left == false) {
+                leftDriveF.setPower(-magnitudeLeft);
+                leftDriveB.setPower(-magnitudeLeft);
+            }
+
+            //R-forward
+            if (((Math.PI/4 < Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) < (Math.PI)/2)) && right == true) {
+                rightDriveF.setPower(magnitudeRight);
+                rightDriveB.setPower(magnitudeRight);
+            }
+
+            if (((Math.PI/4 < Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) < (Math.PI)/2)) && right == false) {
+                rightDriveF.setPower(magnitudeRight);
+                rightDriveB.setPower(magnitudeRight);
+            }
+
+            //R-right
+            if (((Math.PI/4 > Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) > (-Math.PI)/4)) && right == true) {
+                rightDriveF.setPower(magnitudeRight);
+                rightDriveB.setPower(-magnitudeRight);
+            }
+
+            //R-left
+            if (((Math.PI/4 > Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) > (-Math.PI)/4)) && right == false) {
+                rightDriveF.setPower(-magnitudeRight);
+                rightDriveB.setPower(magnitudeRight);
+            }
+
+            //R-back
+            if (((-Math.PI/4 >= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) >= (-Math.PI)/2)) && right == true) {
+                rightDriveF.setPower(-magnitudeRight);
+                rightDriveB.setPower(-magnitudeRight);
+            }
+
+            if (((-Math.PI/4 >= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) >= (-Math.PI)/2)) && right == false) {
+                rightDriveF.setPower(-magnitudeRight);
+                rightDriveB.setPower(-magnitudeRight);
+            }
         }
-
-
     }
 }
+
