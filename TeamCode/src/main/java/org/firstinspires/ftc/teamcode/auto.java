@@ -40,10 +40,16 @@ public class auto extends LinearOpMode
 
         waitForStart();
 
+        //Forward 1 meter
+        while (leftDriveF.getCurrentPosition() < (leftDriveF.getCurrentPosition() + mmtoticks(1000)))
+        {
+            forward(1);
+        }
+
         /* forward(untill in front of kryptoboc)
         turn (90)
         forward(a little more)
-        run lift(2)
+        run lift(1)
         */
 
 
@@ -75,7 +81,6 @@ public class auto extends LinearOpMode
 
     public double mmtoticks(double mm)
     {
-
         double ticks = (mm / 1.4777);
         return ticks;
     }

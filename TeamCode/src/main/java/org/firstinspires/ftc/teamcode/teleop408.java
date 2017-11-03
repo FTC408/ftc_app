@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class teleop408 extends LinearOpMode {
     // Here is a change
     //Create variables and hardware
-    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB;
+    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator;
 
     double ticksPerRev = 288;
     double gearRatio = 1.33;
@@ -27,11 +27,14 @@ public class teleop408 extends LinearOpMode {
         leftDriveB = hardwareMap.dcMotor.get("leftDriveB");
         rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
         rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
+      //  elevator =  hardwareMap.dcMotor.get("elevator");
 
         rightDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
 
         leftDriveB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -42,20 +45,15 @@ public class teleop408 extends LinearOpMode {
 
         while (opModeIsActive())
         {
-            //Automatically sets the power of the motors to zero if none of the stuff below is true. This should solve a problem we
-            //Were having on 11/1/2017 where there was a lag between when we would do something on the controller and
-            //When the robot would do it. I think this was because of how if else statements tend to be... binary in nature
-            //And maybe it took the controller a while to catch up.
-            rightDriveF.setPower(0);
-            rightDriveB.setPower(0);
-            leftDriveB.setPower(0);
-            leftDriveF.setPower(0);
+
+
 
             //Finds the "hypotenuse" if you will, of the triangle of x and y values that is created when the joystick is moved
             double magnitudeLeft = Math.sqrt(Math.pow(gamepad1.left_stick_y,2)+Math.pow(gamepad1.left_stick_x,2));
             double magnitudeRight = Math.sqrt(Math.pow(gamepad1.right_stick_y,2)+Math.pow(gamepad1.right_stick_x,2));
 
             boolean left, right;
+
 
             if (gamepad1.left_stick_x < 0) //Records whether or not x is positive or negative. This helps the program decide
                 left = false;  //Which quadrant the stick is in
@@ -148,7 +146,59 @@ public class teleop408 extends LinearOpMode {
                 rightDriveF.setPower(magnitudeRight);
                 rightDriveB.setPower(magnitudeRight);
             }
+
+            //Automatically sets the power of the motors to zero if none of the stuff below is true. This should solve a problem we
+            //Were having on 11/1/2017 where there was a lag between when we would do something on the controller and
+            //When the robot would do it. I think this was because of how if else statements tend to be... binary in nature
+            //And maybe it took the controller a while to catch up.
+            if (Math.abs(gamepad1.left_stick_x) < 0.2 && Math.abs(gamepad1.left_stick_y) < 0.2)
+            {
+                leftDriveB.setPower(0);
+                leftDriveF.setPower(0);
+            }
+
+            if (Math.abs(gamepad1.right_stick_x) < 0.2 && Math.abs(gamepad1.right_stick_y) < 0.2)
+            {
+                rightDriveF.setPower(0);
+                rightDriveB.setPower(0);
+            }
+
+//            if(gamepad1.dpad_up)
+//            {
+//                elevator.setPower(1);
+//
+//            }
+//
+//            if(gamepad1.dpad_down)
+//            {
+//                elevator.setPower(-1);
+//
+//            }
+//
+
+            telemetry();
+
+
         }
+    }
+
+    public void telemetry ()
+    {
+        //get position
+        telemetry.addData("Right Back Motor Position: ", rightDriveB.getCurrentPosition());
+        telemetry.addData("Right Front Motor Position: ", rightDriveF.getCurrentPosition());
+        telemetry.addData("Left Back Motor Position: ", leftDriveB.getCurrentPosition());
+        telemetry.addData("Left Front Motor Position: ", leftDriveF.getCurrentPosition());
+
+        //get power
+        telemetry.addData("Right Back Motor Power: ", rightDriveB.getPower());
+        telemetry.addData("Right Front Motor Power: ", rightDriveF.getPower());
+        telemetry.addData("Left Back Motor Power: ", leftDriveB.getPower());
+        telemetry.addData("Left Front Motor Power: ", leftDriveF.getPower());
+
+        telemetry.update();
+
+
     }
 }
 
