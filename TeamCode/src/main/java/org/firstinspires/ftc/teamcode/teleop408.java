@@ -34,8 +34,6 @@ public class teleop408 extends LinearOpMode {
         leftDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
-
         leftDriveB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightDriveB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
