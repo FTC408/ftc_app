@@ -40,7 +40,7 @@ public class auto extends LinearOpMode
 
         waitForStart();
 
-        //Forward 1 meter
+        //Forward 1 meter to test encoders once we get the chance to use them
         while (leftDriveF.getCurrentPosition() < (leftDriveF.getCurrentPosition() + mmtoticks(1000)))
         {
             forward(1);
@@ -75,13 +75,13 @@ public class auto extends LinearOpMode
 
     public double tickstomm(int ticks){
 
-    double mm = (ticks * 1.4777);
+    double mm = (ticks * 1.47);
     return mm;
     }
 
     public double mmtoticks(double mm)
     {
-        double ticks = (mm / 1.4777);
+        double ticks = (mm / 1.47);
         return ticks;
     }
 
