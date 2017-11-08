@@ -99,33 +99,25 @@ public class mecanumTest extends LinearOpMode {
             leftDriveB.setPower(magnitudeLeft);
         }
 
-        //Inverse tangent approaches asymptotes at pi over two and negative pi over two, this gives that asymptote a definition
-        //so that the robot won't simply stop at these values
-        if (gamepad1.left_stick_x == 0)
-        {
-            leftDriveF.setPower(-magnitudeLeft * gamepad1.left_stick_y);
-            leftDriveB.setPower(-magnitudeLeft * gamepad1.left_stick_y);
-        }
-
         //L-right
-        if (((Math.PI/6 > Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/6)) && left == true) {
+        if (((Math.PI/6 >= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) >= (-Math.PI)/6)) && left == true) {
             leftDriveF.setPower(-magnitudeLeft);
             leftDriveB.setPower(magnitudeLeft);
         }
 
         //L-left
-        if (((Math.PI/6 > Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/6)) && left == false) {
+        if (((Math.PI/6 >= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) >= (-Math.PI)/6)) && left == false) {
             leftDriveF.setPower(magnitudeLeft);
             leftDriveB.setPower(-magnitudeLeft);
         }
 
         //L-back
-        if (((-Math.PI/3 >= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/2)) && left == true) {
+        if (((-Math.PI/3 >= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) >=(-Math.PI)/2)) && left == true) {
             leftDriveF.setPower(magnitudeLeft);
             leftDriveB.setPower(magnitudeLeft);
         }
 
-        if (((-Math.PI/3 >= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/2)) && left == false) {
+        if (((-Math.PI/3 >= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) >= (-Math.PI)/2)) && left == false) {
             leftDriveF.setPower(-magnitudeLeft);
             leftDriveB.setPower(-magnitudeLeft);
         }
@@ -141,45 +133,84 @@ public class mecanumTest extends LinearOpMode {
             rightDriveB.setPower(-magnitudeRight);
         }
 
+        //R-right
+        if (((Math.PI/6 >= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) >= (-Math.PI)/6)) && right == true) {
+            rightDriveF.setPower(magnitudeRight);
+            rightDriveB.setPower(-magnitudeRight);
+        }
+
+        //R-left
+        if (((Math.PI/6 >= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) >= (-Math.PI)/6)) && right == false) {
+            rightDriveF.setPower(-magnitudeRight);
+            rightDriveB.setPower(magnitudeRight);
+        }
+
+        //R-back
+        if (((-Math.PI/3 >= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) >= (-Math.PI)/2)) && right == true) {
+            rightDriveF.setPower(-magnitudeRight);
+            rightDriveB.setPower(-magnitudeRight);
+        }
+
+        if (((-Math.PI/3 >= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) >= (-Math.PI)/2)) && right == false) {
+            rightDriveF.setPower(magnitudeRight);
+            rightDriveB.setPower(magnitudeRight);
+        }
+
+        //Left Forward Diagonal-right
+        if (((Math.PI/3 > Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (Math.PI)/6)) && left == true) {
+            leftDriveF.setPower(magnitudeLeft);
+            leftDriveB.setPower(0);
+        }
+
+        //Left Forward Diagonal-left
+        if (((Math.PI/3 > Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (Math.PI)/6)) && left == false) {
+            leftDriveF.setPower(0);
+            leftDriveB.setPower(magnitudeLeft);
+        }
+
+        //Left Diagonal-back right
+        if (((-Math.PI/6 > Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/3) && left == true)) {
+            leftDriveF.setPower(0);
+            leftDriveB.setPower(-magnitudeLeft);
+        }
+
+        //Left Diagonal back left
+        if (((-Math.PI/6 > Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/3)) && left == false) {
+            leftDriveF.setPower(-magnitudeLeft);
+            leftDriveB.setPower(0);
+        }
+        //Right Diagonal-forward right
+        if (((Math.PI/6 < Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) < (Math.PI)/3)) && right == true) {
+            rightDriveF.setPower(0);
+            rightDriveB.setPower(magnitudeRight);
+        }
+
+        //Right Diagonal forward left
+        if (((Math.PI/6 < Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) < (Math.PI)/3)) && right == false) {
+            rightDriveF.setPower(magnitudeRight);
+            rightDriveB.setPower(0);
+        }
+
+        //Right Diagonal-back (Right)
+        if (((-Math.PI/6 > Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) > (-Math.PI)/3)) && right == true) {
+            rightDriveF.setPower(-magnitudeRight);
+            rightDriveB.setPower(0);
+        }
+
+        //Right Diagonal-back (Left)
+        if (((-Math.PI/6 > Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) > (-Math.PI)/3)) && right == false) {
+            rightDriveF.setPower(0);
+            rightDriveB.setPower(-magnitudeRight);
+        }
+
+
+
         //Inverse tangent approaches asymptotes at pi over two and negative pi over two, this gives that asymptote a definition
         //so that the robot won't simply stop at these values
         if (gamepad1.right_stick_x == 0)
         {
             rightDriveF.setPower(magnitudeRight * gamepad1.right_stick_y);
             rightDriveB.setPower(magnitudeRight * gamepad1.right_stick_y);
-        }
-
-        //R-right
-        if (((Math.PI/6 > Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) > (-Math.PI)/6)) && right == true) {
-            rightDriveF.setPower(magnitudeRight);
-            rightDriveB.setPower(-magnitudeRight);
-        }
-
-        //R-left
-        if (((Math.PI/6 > Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) > (-Math.PI)/6)) && right == false) {
-            rightDriveF.setPower(-magnitudeRight);
-            rightDriveB.setPower(magnitudeRight);
-        }
-
-        //R-back
-        if (((-Math.PI/3 >= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) > (-Math.PI)/2)) && right == true) {
-            rightDriveF.setPower(-magnitudeRight);
-            rightDriveB.setPower(-magnitudeRight);
-        }
-
-        if (((-Math.PI/3 >= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) > (-Math.PI)/2)) && right == false) {
-            rightDriveF.setPower(magnitudeRight);
-            rightDriveB.setPower(magnitudeRight);
-        }
-        //Left Diagonal-forward
-        if (((Math.PI/6 <= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) < (Math.PI)/2)) && left == true) {
-            leftDriveF.setPower(-magnitudeLeft);
-            leftDriveB.setPower(-magnitudeLeft);
-        }
-
-        if (((Math.PI/6 <= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) < (Math.PI)/2)) && left == false) {
-            leftDriveF.setPower(magnitudeLeft);
-            leftDriveB.setPower(magnitudeLeft);
         }
 
         //Inverse tangent approaches asymptotes at pi over two and negative pi over two, this gives that asymptote a definition
@@ -189,63 +220,6 @@ public class mecanumTest extends LinearOpMode {
             leftDriveF.setPower(-magnitudeLeft * gamepad1.left_stick_y);
             leftDriveB.setPower(-magnitudeLeft * gamepad1.left_stick_y);
         }
-
-        //Left Forward Diagonal-right
-        if (((Math.PI/3 > Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/6)) && left == true) {
-            leftDriveF.setPower(magnitudeLeft);
-            leftDriveB.setPower(0);
-        }
-
-        //Left Forward Diagonal-left
-        if (((Math.PI/3 > Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/6)) && left == false) {
-            leftDriveF.setPower(0);
-            leftDriveB.setPower(magnitudeLeft);
-        }
-
-        //Left Diagonal-back right
-        if (((-Math.PI/6 >= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/3) && left == true)) {
-            leftDriveF.setPower(0);
-            leftDriveB.setPower(-magnitudeLeft);
-        }
-
-        //Left Diagonal back left
-        if (((-Math.PI/6 >= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/3)) && left == false) {
-            leftDriveF.setPower(-magnitudeLeft);
-            leftDriveB.setPower(0);
-        }
-        //Right Diagonal-forward right
-        if (((Math.PI/6 <= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) < (Math.PI)/3)) && right == true) {
-            rightDriveF.setPower(0);
-            rightDriveB.setPower(magnitudeRight);
-        }
-
-        //Right Diagonal forward left
-        if (((Math.PI/6 <= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) < (Math.PI)/3)) && right == false) {
-            rightDriveF.setPower(magnitudeRight);
-            rightDriveB.setPower(0);
-        }
-
-        //Inverse tangent approaches asymptotes at pi over two and negative pi over two, this gives that asymptote a definition
-        //so that the robot won't simply stop at these values
-        if (gamepad1.right_stick_x == 0)
-        {
-            rightDriveF.setPower(magnitudeRight * gamepad1.right_stick_y);
-            rightDriveB.setPower(magnitudeRight * gamepad1.right_stick_y);
-        }
-
-        //Right Diagonal-back (Right)
-        if (((-Math.PI/6 >= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) > (-Math.PI)/3)) && right == true) {
-            rightDriveF.setPower(-magnitudeRight);
-            rightDriveB.setPower(0);
-        }
-
-        //Right Diagonal-back (Left)
-        if (((-Math.PI/6 >= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) > (-Math.PI)/3)) && right == false) {
-            rightDriveF.setPower(0);
-            rightDriveB.setPower(-magnitudeRight);
-        }
-
-
 
 
         //This sets the power of the motors to zero if the value that they are being driven by is less than 0.2
