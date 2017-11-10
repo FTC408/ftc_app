@@ -27,11 +27,11 @@ public class auto extends LinearOpMode
         leftDriveF = hardwareMap.dcMotor.get("leftDriveF");
         leftDriveB = hardwareMap.dcMotor.get("leftDriveB");
 
-        rightDriveB.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightDriveF.setDirection(DcMotorSimple.Direction.REVERSE);
-
         rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
         rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
+
+        rightDriveB.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightDriveF.setDirection(DcMotorSimple.Direction.REVERSE);
 
         leftDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -40,11 +40,8 @@ public class auto extends LinearOpMode
 
         waitForStart();
 
-        //Forward 1 meter to test encoders once we get the chance to use them
-        while (leftDriveF.getCurrentPosition() < (leftDriveF.getCurrentPosition() + mmtoticks(1000)))
-        {
-            forward(1);
-        }
+        //Forward, full speed, 1 m
+        forward(1, 1000);
 
         /* forward(untill in front of kryptoboc)
         turn (90)
@@ -73,15 +70,35 @@ public class auto extends LinearOpMode
         rightPower(power);
     }
 
+    public void forward(double power, int mm)
+    {
+        int pos = leftDriveF.getCurrentPosition();
+        //Forward 1 meter to test encoders once we get the chance to use them
+
+         if (power >= 0) {
+             while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(Math.abs(mm)))) {
+                 forward(power);
+             }
+         }
+         else
+         {
+             while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(Math.abs(mm)))) {
+                 forward(power);
+             }
+         }
+    }
+
+
     public double tickstomm(int ticks){
 
-    double mm = (ticks * 1.47);
+    double mm = (ticks * 3.989);
     return mm;
     }
 
+   //Go forward for such and such distance
     public double mmtoticks(double mm)
     {
-        double ticks = (mm / 1.47);
+        double ticks = (mm / 3.989);
         return ticks;
     }
 

@@ -25,7 +25,7 @@ public class teleop408 extends LinearOpMode {
         leftDriveB = hardwareMap.dcMotor.get("leftDriveB");
         rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
         rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
-      //  elevator =  hardwareMap.dcMotor.get("elevator");
+        elevator =  hardwareMap.dcMotor.get("elevator");
 
         rightDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -46,20 +46,20 @@ public class teleop408 extends LinearOpMode {
             //want to. Also it is easier to not get if statements mixed up this way, as it can be hard to tell where the control
             //For one thing ends and another begins
 
-
+            elevator.setPower(0);
             // Control Vertical Elevator
-//            if(gamepad1.dpad_up) //If the up button is pressed, the elevator will go up
-//            {
-//                elevator.setPower(1);
-//
-//            }
-//
-//            if(gamepad1.dpad_down) //If the down button is pressed, the elevator will go down
-//            {
-//                elevator.setPower(-1);
-//
-//            }
-//
+           if(gamepad1.right_bumper) //If the up button is pressed, the elevator will go up
+            {
+                elevator.setPower(1);
+
+            }
+
+            if(gamepad1.left_bumper) //If the down button is pressed, the elevator will go down
+            {
+                elevator.setPower(-1);
+
+            }
+
             telemetry(); //Updates telemetry. See telemetry method below
 
         }
@@ -109,14 +109,14 @@ public class teleop408 extends LinearOpMode {
 
         //L-right
         if (((Math.PI/4 > Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/4)) && left == true) {
-            leftDriveF.setPower(-magnitudeLeft);
-            leftDriveB.setPower(magnitudeLeft);
+            leftDriveF.setPower(magnitudeLeft);
+            leftDriveB.setPower(-magnitudeLeft);
         }
 
         //L-left
         if (((Math.PI/4 > Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) > (-Math.PI)/4)) && left == false) {
-            leftDriveF.setPower(magnitudeLeft);
-            leftDriveB.setPower(-magnitudeLeft);
+            leftDriveF.setPower(-magnitudeLeft);
+            leftDriveB.setPower(magnitudeLeft);
         }
 
         //L-back
