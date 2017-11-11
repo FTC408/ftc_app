@@ -71,34 +71,34 @@ public class auto extends LinearOpMode
     }
 
     public void forward(double power, int mm)
-    {
-        int pos = leftDriveF.getCurrentPosition();
-        //Forward 1 meter to test encoders once we get the chance to use them
+{
+    int pos = leftDriveF.getCurrentPosition();
+    //Forward 1 meter to test encoders once we get the chance to use them
 
-         if (power >= 0) {
-             while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(Math.abs(mm)))) {
-                 forward(power);
-             }
-         }
-         else
-         {
-             while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(Math.abs(mm)))) {
-                 forward(power);
-             }
-         }
+    if (power >= 0) {
+        while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(Math.abs(mm)))) {
+            forward(power);
+        }
     }
+    else
+    {
+        while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(Math.abs(mm)))) {
+            forward(power);
+        }
+    }
+}
 
 
     public double tickstomm(int ticks){
 
-    double mm = (ticks * 3.989);
+    double mm = (ticks * 2.955);
     return mm;
     }
 
    //Go forward for such and such distance
     public double mmtoticks(double mm)
     {
-        double ticks = (mm / 3.989);
+        double ticks = (mm / 2.955);
         return ticks;
     }
 

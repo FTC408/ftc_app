@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -13,6 +14,7 @@ public class teleop408 extends LinearOpMode {
     // Here is a change
     //Create variables and hardware
     DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator;
+    CRServo intakeRight, intakeLeft;
 
     double ticksPerRev = 288, gearRatio = 1.33, diameter = 101.6;
 
@@ -26,6 +28,9 @@ public class teleop408 extends LinearOpMode {
         rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
         rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
         elevator =  hardwareMap.dcMotor.get("elevator");
+
+        intakeRight = hardwareMap.crservo.get("intakeRight");
+        intakeLeft = hardwareMap.crservo.get("intakeLeft");
 
         rightDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -46,19 +51,46 @@ public class teleop408 extends LinearOpMode {
             //want to. Also it is easier to not get if statements mixed up this way, as it can be hard to tell where the control
             //For one thing ends and another begins
 
-            elevator.setPower(0);
+
             // Control Vertical Elevator
+            elevator.setPower(0);
            if(gamepad1.right_bumper) //If the up button is pressed, the elevator will go up
-            {
-                elevator.setPower(1);
+           {
+               elevator.setPower(1);
+           }
+           if(gamepad1.left_bumper) //If the down button is pressed, the elevator will go down
+           {
+               elevator.setPower(-1);
+           }
+           if (gamepad1.left_bumper && gamepad1.right_bumper) //If both, do nothing
+           {
+               elevator.setPower(0);
+           }
 
+
+
+
+            //Control Intake
+            intakeLeft.setPower(0);
+            intakeRight.setPower(0);
+
+            if (gamepad1.right_trigger >= 0.2) //If right trigger is pressed, intake pulls in, so right bump and trig are up and in
+            {
+                intakeLeft.setPower(1);
+                intakeRight.setPower(-1);
+            }
+            if (gamepad1.left_trigger >= 0.2) //If left trigger is pressed, intake pushes out
+            {
+                intakeLeft.setPower(-1);
+                intakeRight.setPower(1);
+            }
+            if (gamepad1.right_trigger >= 0.2 && gamepad1.left_trigger >= 0.2) //If both, do nothing
+            {
+                intakeLeft.setPower(0);
+                intakeRight.setPower(0);
             }
 
-            if(gamepad1.left_bumper) //If the down button is pressed, the elevator will go down
-            {
-                elevator.setPower(-1);
 
-            }
 
             telemetry(); //Updates telemetry. See telemetry method below
 
