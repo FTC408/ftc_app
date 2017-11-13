@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * Created by Austin on 10/25/2017.
  */
 @Autonomous(name= "Auto", group = "Auto")
+@Disabled
 public class auto extends LinearOpMode
 {
 

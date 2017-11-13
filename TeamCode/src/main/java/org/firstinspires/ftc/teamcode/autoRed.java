@@ -9,13 +9,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 /**
  * Created by Austin on 10/25/2017.
  */
-@Autonomous(name= "Auto", group = "Auto")
+@Autonomous(name= "Auto Red", group = "Auto")
 public class autoRed extends LinearOpMode
 {
 
     //Create variables and hardware
     DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB;
-    ColorSensor color;
+    //ColorSensor color;
     Float left, right;
     double ticksPerRev = 288;
     double gearRatio = 1.33;
@@ -31,9 +31,9 @@ public class autoRed extends LinearOpMode
         rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
         rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
 
-        color = hardwareMap.colorSensor.get("color");
+        //color = hardwareMap.colorSensor.get("color");
 
-        color.enableLed(false);
+        //color.enableLed(false);
 
         rightDriveB.setDirection(DcMotorSimple.Direction.REVERSE);
         rightDriveF.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -47,33 +47,54 @@ public class autoRed extends LinearOpMode
 
         //Forward, full speed, 1 m
         forward(1, 1000);
+
+        forward(0);
+        sleep(500);
+
         //Turn, Full power 90 degrees
         turn(1, 90);
+
+        forward(0);
+        sleep(500);
+
+        //Strafe right, Full power, 1 m
+        strafe(1, 1000);
+
+        forward(0);
 
 
 
     }
 
-    public void jewel()
+   /* public void jewel()
     {
-        //strafe towards jewel
+        //strafe right
+        strafe(0.5, 50);
+
         //lower arm
 
         //If Red
         if (ColorTest() == 1)
         {
             //towards color sensor
+            forward(0.5, 100);
+            forward(-0.5, 100);
         }
-
+        //If blue
         else if (ColorTest() == 0)
         {
             //Away from color sensor
+            forward(-0.5, 100);
+            forward(0.5, 100);
         }
-
+        //If none
         else if (ColorTest() == 0.5)
         {
             //Skip selective action
         }
+
+        //strafe left
+        strafe(-0.5, 50);
 
     }
 
@@ -93,7 +114,7 @@ public class autoRed extends LinearOpMode
             return 0.5;
         }
 
-    }
+    }*/
 
     public void leftPower(double power)
     {

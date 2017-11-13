@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 /**
  * Created by Austin on 10/25/2017.
  */
-@Autonomous(name= "Auto", group = "Auto")
+@Autonomous(name= "Auto Blue", group = "Auto")
 public class autoBlue extends LinearOpMode
 {
 
@@ -31,9 +31,9 @@ public class autoBlue extends LinearOpMode
         rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
         rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
 
-        color = hardwareMap.colorSensor.get("color");
+        //color = hardwareMap.colorSensor.get("color");
 
-        color.enableLed(false);
+        //color.enableLed(false);
 
         rightDriveB.setDirection(DcMotorSimple.Direction.REVERSE);
         rightDriveF.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -47,16 +47,32 @@ public class autoBlue extends LinearOpMode
 
         //Forward, full speed, 1 m
         forward(1, 1000);
+
+        forward(0);
+        sleep(500);
+
         //Turn, Full power 90 degrees
         turn(1, 90);
+
+        forward(0);
+        sleep(500);
+
+        //Strafe right, Full power, 1 m
+        strafe(1, 1000);
+
+        forward(0);
+
 
 
 
     }
 
-    public void jewel()
+  /*  public void jewel()
     {
-        //strafe
+
+        //strafe left
+        strafe(-0.5, 50);
+
         //lower arm
 
         //If Red
@@ -66,18 +82,21 @@ public class autoBlue extends LinearOpMode
             forward(0.5, 100);
             //Away from color sensor
         }
-
+        //If blue
         else if (ColorTest() == 0)
         {
             forward(0.5, 100);
             forward(-0.5, 100);
             //Towards color sensor
         }
-
+        //If none
         else if (ColorTest() == 0.5)
         {
             //Skip selective action
         }
+
+        //strafe right
+        strafe(0.5, 50);
 
     }
 
@@ -97,7 +116,7 @@ public class autoBlue extends LinearOpMode
             return 0.5;
         }
 
-    }
+    }*/
 
     public void leftPower(double power)
     {
