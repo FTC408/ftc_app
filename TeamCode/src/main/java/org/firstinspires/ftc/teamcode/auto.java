@@ -42,6 +42,8 @@ public class auto extends LinearOpMode
 
         //Forward, full speed, 1 m
         forward(1, 1000);
+        //Turn, Full power 90 degrees
+        turn(1, 90);
 
         /* forward(untill in front of kryptoboc)
         turn (90)
@@ -88,6 +90,37 @@ public class auto extends LinearOpMode
          }
     }
 
+    //Positive Degrees to the right, negative to the left
+    public void turn(double power, int degrees)
+    {
+     double diameter = 2;
+     int pos = leftDriveF.getCurrentPosition();
+     double Circumfrence = 2 * Math.PI * diameter;
+     double distance = (degrees * Circumfrence) /360;
+
+        if (degrees >= 0) {
+            while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(distance))) {
+                right(Math.abs(power));
+            }
+        }
+        else
+        {
+            while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(distance))) {
+                left(Math.abs(power));
+            }
+        }
+    }
+
+    public void right(double power)
+    {
+        leftPower(power);
+        rightPower(-power);
+    }
+    public void left(double power)
+    {
+        leftPower(-power);
+        rightPower(power);
+    }
 
     public double tickstomm(int ticks){
 
