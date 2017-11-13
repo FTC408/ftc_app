@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * Created by Austin on 10/25/2017.
  */
 @Autonomous(name= "Auto", group = "Auto")
-public class auto extends LinearOpMode
+public class autoBlue extends LinearOpMode
 {
 
     //Create variables and hardware
@@ -57,23 +56,27 @@ public class auto extends LinearOpMode
 
     public void jewel()
     {
-        //strafe towards jewel
+        //strafe
         //lower arm
 
         //If Red
         if (ColorTest() == 1)
         {
-
+            forward(-0.5, 100);
+            forward(0.5, 100);
+            //Away from color sensor
         }
 
         else if (ColorTest() == 0)
         {
-
+            forward(0.5, 100);
+            forward(-0.5, 100);
+            //Towards color sensor
         }
 
         else if (ColorTest() == 0.5)
         {
-
+            //Skip selective action
         }
 
     }
@@ -131,6 +134,25 @@ public class auto extends LinearOpMode
         }
     }
 }
+    //Positive power is to the right, negative to the left
+    public void strafe(double power, int mm)
+    {
+        int pos = leftDriveF.getCurrentPosition();
+        //Forward 1 meter to test encoders once we get the chance to use them
+
+        //Strafe Right
+        if (power >= 0) {
+            while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(Math.abs(mm)))) {
+                strafeRight(Math.abs(power));
+            }
+        }
+        //Strafe left
+        else {
+            while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(Math.abs(mm)))) {
+                strafeLeft(Math.abs(power));
+            }
+        }
+    }
 
     //Positive Degrees to the right, negative to the left
     public void turn(double power, int degrees)
@@ -151,6 +173,22 @@ public class auto extends LinearOpMode
                 left(Math.abs(power));
             }
         }
+    }
+
+    public void strafeRight(double power)
+    {
+        leftDriveF.setPower(power);
+        leftDriveB.setPower(-power);
+        rightDriveF.setPower(-power);
+        rightDriveB.setPower(power);
+    }
+
+    public void strafeLeft(double power)
+    {
+        leftDriveF.setPower(-power);
+        leftDriveB.setPower(power);
+        rightDriveF.setPower(power);
+        rightDriveB.setPower(-power);
     }
 
     public void right(double power)

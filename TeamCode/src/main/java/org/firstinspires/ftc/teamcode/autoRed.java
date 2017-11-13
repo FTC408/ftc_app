@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * Created by Austin on 10/25/2017.
  */
 @Autonomous(name= "Auto", group = "Auto")
-public class auto extends LinearOpMode
+public class autoRed extends LinearOpMode
 {
 
     //Create variables and hardware
@@ -63,17 +62,17 @@ public class auto extends LinearOpMode
         //If Red
         if (ColorTest() == 1)
         {
-
+            //towards color sensor
         }
 
         else if (ColorTest() == 0)
         {
-
+            //Away from color sensor
         }
 
         else if (ColorTest() == 0.5)
         {
-
+            //Skip selective action
         }
 
     }
@@ -114,6 +113,26 @@ public class auto extends LinearOpMode
         rightPower(power);
     }
 
+    //Positive power is to the right, negative to the left
+    public void strafe(double power, int mm)
+    {
+        int pos = leftDriveF.getCurrentPosition();
+        //Forward 1 meter to test encoders once we get the chance to use them
+
+        //Strafe Right
+        if (power >= 0) {
+            while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(Math.abs(mm)))) {
+                strafeRight(Math.abs(power));
+            }
+        }
+        //Strafe left
+        else {
+            while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(Math.abs(mm)))) {
+                strafeLeft(Math.abs(power));
+            }
+        }
+    }
+
     public void forward(double power, int mm)
 {
     int pos = leftDriveF.getCurrentPosition();
@@ -151,6 +170,22 @@ public class auto extends LinearOpMode
                 left(Math.abs(power));
             }
         }
+    }
+
+    public void strafeRight(double power)
+    {
+        leftDriveF.setPower(power);
+        leftDriveB.setPower(-power);
+        rightDriveF.setPower(-power);
+        rightDriveB.setPower(power);
+    }
+
+    public void strafeLeft(double power)
+    {
+        leftDriveF.setPower(-power);
+        leftDriveB.setPower(power);
+        rightDriveF.setPower(power);
+        rightDriveB.setPower(-power);
     }
 
     public void right(double power)
