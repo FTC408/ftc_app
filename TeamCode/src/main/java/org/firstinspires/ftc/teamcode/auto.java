@@ -93,9 +93,9 @@ public class auto extends LinearOpMode
     //Positive Degrees to the right, negative to the left
     public void turn(double power, int degrees)
     {
-     double diameter = 2;
+     double diameter = 245 * 2; //245 mm radius
      int pos = leftDriveF.getCurrentPosition();
-     double Circumfrence = 2 * Math.PI * diameter;
+     double Circumfrence = Math.PI * diameter;
      double distance = (degrees * Circumfrence) /360;
 
         if (degrees >= 0) {
