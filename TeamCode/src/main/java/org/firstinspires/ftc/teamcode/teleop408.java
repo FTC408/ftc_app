@@ -56,11 +56,11 @@ public class teleop408 extends LinearOpMode {
             elevator.setPower(0);
            if(gamepad1.right_bumper) //If the up button is pressed, the elevator will go up
            {
-               elevator.setPower(1);
+               elevator.setPower(0.5);
            }
            if(gamepad1.left_bumper) //If the down button is pressed, the elevator will go down
            {
-               elevator.setPower(-1);
+               elevator.setPower(-0.5);
            }
            if (gamepad1.left_bumper && gamepad1.right_bumper) //If both, do nothing
            {

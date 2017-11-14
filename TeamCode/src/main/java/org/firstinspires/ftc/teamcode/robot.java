@@ -173,5 +173,5 @@ public class robot extends LinearOpMode
 
 
 
-    public void runOpMode(){}
+    public void runOpMode() throws InterruptedException{}
 }
