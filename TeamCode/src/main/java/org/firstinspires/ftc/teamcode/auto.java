@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -17,6 +18,7 @@ public class auto extends LinearOpMode
     //Create variables and hardware
     DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB;
     ColorSensor color;
+    CRServo intakeRight, intakeLeft;
     Float left, right;
     double ticksPerRev = 288;
     double gearRatio = 1.33;
@@ -32,9 +34,12 @@ public class auto extends LinearOpMode
         rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
         rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
 
-        color = hardwareMap.colorSensor.get("color");
+        intakeRight = hardwareMap.crservo.get("intakeRight");
+        intakeLeft = hardwareMap.crservo.get("intakeLeft");
 
-        color.enableLed(false);
+        //color = hardwareMap.colorSensor.get("color");
+
+        //color.enableLed(false);
 
         rightDriveB.setDirection(DcMotorSimple.Direction.REVERSE);
         rightDriveF.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -70,7 +75,7 @@ public class auto extends LinearOpMode
 
     }
 
-    public void jewel()
+   /* public void jewel()
     {
         //strafe towards jewel
         //lower arm
@@ -102,7 +107,7 @@ public class auto extends LinearOpMode
             return 0.5;
         }
 
-    }
+    }*/
 
     public void leftPower(double power)
     {

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -15,6 +16,7 @@ public class autoRed extends LinearOpMode
 
     //Create variables and hardware
     DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB;
+    CRServo intakeRight, intakeLeft;
     //ColorSensor color;
     Float left, right;
     double ticksPerRev = 288;
@@ -30,6 +32,9 @@ public class autoRed extends LinearOpMode
 
         rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
         rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
+
+        intakeRight = hardwareMap.crservo.get("intakeRight");
+        intakeLeft = hardwareMap.crservo.get("intakeLeft");
 
         //color = hardwareMap.colorSensor.get("color");
 
