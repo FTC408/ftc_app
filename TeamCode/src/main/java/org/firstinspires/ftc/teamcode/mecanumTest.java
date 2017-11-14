@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class mecanumTest extends LinearOpMode {
     // Here is a change
     //Create variables and hardware
-    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator;
+    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB;
 
     double ticksPerRev = 288, gearRatio = 1.33, diameter = 101.6;
 
@@ -25,7 +25,6 @@ public class mecanumTest extends LinearOpMode {
         leftDriveB = hardwareMap.dcMotor.get("leftDriveB");
         rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
         rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
-        //  elevator =  hardwareMap.dcMotor.get("elevator");
 
         rightDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -46,20 +45,6 @@ public class mecanumTest extends LinearOpMode {
             //want to. Also it is easier to not get if statements mixed up this way, as it can be hard to tell where the control
             //For one thing ends and another begins
 
-
-            // Control Vertical Elevator
-//            if(gamepad1.dpad_up) //If the up button is pressed, the elevator will go up
-//            {
-//                elevator.setPower(1);
-//
-//            }
-//
-//            if(gamepad1.dpad_down) //If the down button is pressed, the elevator will go down
-//            {
-//                elevator.setPower(-1);
-//
-//            }
-//
             telemetry(); //Updates telemetry. See telemetry method below
 
         }
@@ -101,14 +86,14 @@ public class mecanumTest extends LinearOpMode {
 
         //L-right
         if (((Math.PI/6 >= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) >= (-Math.PI)/6)) && left == true) {
-            leftDriveF.setPower(-magnitudeLeft);
-            leftDriveB.setPower(magnitudeLeft);
+            leftDriveF.setPower(magnitudeLeft);
+            leftDriveB.setPower(-magnitudeLeft);
         }
 
         //L-left
         if (((Math.PI/6 >= Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) && Math.atan(gamepad1.left_stick_y/gamepad1.left_stick_x) >= (-Math.PI)/6)) && left == false) {
-            leftDriveF.setPower(magnitudeLeft);
-            leftDriveB.setPower(-magnitudeLeft);
+            leftDriveF.setPower(-magnitudeLeft);
+            leftDriveB.setPower(magnitudeLeft);
         }
 
         //L-back

@@ -223,16 +223,21 @@ public class teleop408 extends LinearOpMode {
     public void telemetry ()
     {
         //get position
+        telemetry.addData("Motor Positions", "");
         telemetry.addData("Right Back Motor Position: ", rightDriveB.getCurrentPosition());
         telemetry.addData("Right Front Motor Position: ", rightDriveF.getCurrentPosition());
         telemetry.addData("Left Back Motor Position: ", leftDriveB.getCurrentPosition());
         telemetry.addData("Left Front Motor Position: ", leftDriveF.getCurrentPosition());
+        telemetry.addData("Elevator Position: ", elevator.getCurrentPosition());
+        telemetry.addData("", "");
 
         //get power
+        telemetry.addData("Motor Powers", "");
         telemetry.addData("Right Back Motor Power: ", rightDriveB.getPower());
         telemetry.addData("Right Front Motor Power: ", rightDriveF.getPower());
         telemetry.addData("Left Back Motor Power: ", leftDriveB.getPower());
         telemetry.addData("Left Front Motor Power: ", leftDriveF.getPower());
+        telemetry.addData("", "");
 
         telemetry.update();
     }

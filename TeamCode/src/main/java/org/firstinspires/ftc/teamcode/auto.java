@@ -14,7 +14,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 @Disabled
 public class auto extends LinearOpMode
 {
-
     //Create variables and hardware
     DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB;
     ColorSensor color;
@@ -45,14 +44,29 @@ public class auto extends LinearOpMode
         rightDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftDriveB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightDriveB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         waitForStart();
 
         //Forward, full speed, 1 m
         forward(1, 1000);
+
+        forward(0);
+        sleep(500);
+
         //Turn, Full power 90 degrees
         turn(1, 90);
 
+        forward(0);
+        sleep(500);
 
+        //Strafe right, Full power, 1 m
+        strafe(1, 1000);
+
+        forward(0);
 
     }
 
@@ -60,23 +74,16 @@ public class auto extends LinearOpMode
     {
         //strafe towards jewel
         //lower arm
-
         //If Red
         if (ColorTest() == 1)
         {
-
         }
-
         else if (ColorTest() == 0)
         {
-
         }
-
         else if (ColorTest() == 0.5)
         {
-
         }
-
     }
 
     //Returns 1 if red, 0 if blue, 0.5 if neither
@@ -152,6 +159,42 @@ public class auto extends LinearOpMode
                 left(Math.abs(power));
             }
         }
+    }
+
+    //Positive power is to the right, negative to the left
+    public void strafe(double power, int mm)
+    {
+        int pos = leftDriveF.getCurrentPosition();
+        //Forward 1 meter to test encoders once we get the chance to use them
+
+        //Strafe Right
+        if (power >= 0) {
+            while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(Math.abs(mm)))) {
+                strafeRight(Math.abs(power));
+            }
+        }
+        //Strafe left
+        else {
+            while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(Math.abs(mm)))) {
+                strafeLeft(Math.abs(power));
+            }
+        }
+    }
+
+    public void strafeRight(double power)
+    {
+        leftDriveF.setPower(power);
+        leftDriveB.setPower(-power);
+        rightDriveF.setPower(-power);
+        rightDriveB.setPower(power);
+    }
+
+    public void strafeLeft(double power)
+    {
+        leftDriveF.setPower(-power);
+        leftDriveB.setPower(power);
+        rightDriveF.setPower(power);
+        rightDriveB.setPower(-power);
     }
 
     public void right(double power)
