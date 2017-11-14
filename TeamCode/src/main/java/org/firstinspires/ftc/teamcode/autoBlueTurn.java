@@ -9,13 +9,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 /**
  * Created by Austin on 10/25/2017.
  */
-@Autonomous(name= "Auto Red", group = "Auto")
-public class autoRed extends LinearOpMode
+@Autonomous(name= "Auto Blue", group = "Auto")
+public class autoBlueTurn extends LinearOpMode
 {
 
     //Create variables and hardware
     DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB;
-    //ColorSensor color;
+    ColorSensor color;
     Float left, right;
     double ticksPerRev = 288;
     double gearRatio = 1.33;
@@ -50,15 +50,15 @@ public class autoRed extends LinearOpMode
 
         waitForStart();
 
-        forward(0.5,711);
+        forward(0.5, 914);
         forward(0);
         sleep(500);
 
-        strafe(-0.5, 331);
+        turn(0.5,-90);
         forward(0);
         sleep(500);
 
-        forward(0.5, 432);
+        forward(0.5,457);
         forward(0);
         sleep(500);
 
@@ -67,26 +67,27 @@ public class autoRed extends LinearOpMode
 
     }
 
-   /* public void jewel()
+  /*  public void jewel()
     {
-        //strafe right
-        strafe(0.5, 50);
+
+        //strafe left
+        strafe(-0.5, 50);
 
         //lower arm
 
         //If Red
         if (ColorTest() == 1)
         {
-            //towards color sensor
-            forward(0.5, 100);
             forward(-0.5, 100);
+            forward(0.5, 100);
+            //Away from color sensor
         }
         //If blue
         else if (ColorTest() == 0)
         {
-            //Away from color sensor
-            forward(-0.5, 100);
             forward(0.5, 100);
+            forward(-0.5, 100);
+            //Towards color sensor
         }
         //If none
         else if (ColorTest() == 0.5)
@@ -94,8 +95,8 @@ public class autoRed extends LinearOpMode
             //Skip selective action
         }
 
-        //strafe left
-        strafe(-0.5, 50);
+        //strafe right
+        strafe(0.5, 50);
 
     }
 
@@ -135,6 +136,23 @@ public class autoRed extends LinearOpMode
         rightPower(power);
     }
 
+    public void forward(double power, int mm)
+{
+    int pos = leftDriveF.getCurrentPosition();
+    //Forward 1 meter to test encoders once we get the chance to use them
+
+    if (power >= 0) {
+        while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(Math.abs(mm)))) {
+            forward(power);
+        }
+    }
+    else
+    {
+        while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(Math.abs(mm)))) {
+            forward(power);
+        }
+    }
+}
     //Positive power is to the right, negative to the left
     public void strafe(double power, int mm)
     {
@@ -154,24 +172,6 @@ public class autoRed extends LinearOpMode
             }
         }
     }
-
-    public void forward(double power, int mm)
-{
-    int pos = leftDriveF.getCurrentPosition();
-    //Forward 1 meter to test encoders once we get the chance to use them
-
-    if (power >= 0) {
-        while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(Math.abs(mm)))) {
-            forward(power);
-        }
-    }
-    else
-    {
-        while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(Math.abs(mm)))) {
-            forward(power);
-        }
-    }
-}
 
     //Positive Degrees to the right, negative to the left
     public void turn(double power, int degrees)

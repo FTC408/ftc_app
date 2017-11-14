@@ -46,26 +46,25 @@ public class autoBlue extends LinearOpMode
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftDriveB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightDriveB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         waitForStart();
 
-        //Forward, full speed, 1 m
-        forward(1, 1000);
 
-        forward(0);
+        forward(0.5, 711);
+        forward(0, 0);
         sleep(500);
 
-        //Turn, Full power 90 degrees
-        turn(1, 90);
-
-        forward(0);
+        strafe(0.5, 330);
+        forward(0, 0);
         sleep(500);
 
-        //Strafe right, Full power, 1 m
-        strafe(1, 1000);
+        forward(0.5, 432);
+        forward(0, 0);
+        sleep(500);
 
-        forward(0);
+
+
 
 
 

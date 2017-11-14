@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -10,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * Created by Austin on 10/25/2017.
  */
 @Autonomous(name= "Auto Red", group = "Auto")
-public class autoRed extends LinearOpMode
+public class autoRedTurn extends LinearOpMode
 {
 
     //Create variables and hardware
@@ -50,18 +49,17 @@ public class autoRed extends LinearOpMode
 
         waitForStart();
 
-        forward(0.5,711);
+        forward(0.5,914);
         forward(0);
         sleep(500);
 
-        strafe(-0.5, 331);
+        turn(0.5,90);
         forward(0);
         sleep(500);
 
-        forward(0.5, 432);
+        forward(0.5, 457);
         forward(0);
         sleep(500);
-
 
 
 

@@ -146,7 +146,7 @@ public class auto extends LinearOpMode
      double diameter = 245 * 2; //245 mm radius
      int pos = leftDriveF.getCurrentPosition();
      double Circumfrence = Math.PI * diameter;
-     double distance = (degrees * Circumfrence) /360;
+     double distance = (degrees * Circumfrence) /180;
 
         if (degrees >= 0) {
             while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(distance))) {
