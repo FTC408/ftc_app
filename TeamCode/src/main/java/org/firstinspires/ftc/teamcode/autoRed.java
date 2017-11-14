@@ -30,6 +30,8 @@ public class autoRed extends robot
         forward(0);
         sleep(500);
 
+        placeBlock();
+
     }
 }
 

@@ -51,6 +51,14 @@ public class robot extends LinearOpMode
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
+    public void placeBlock()
+    {
+        intakeLeft.setPower(-1);
+        intakeRight.setPower(1);
+        sleep(1500);
+        intakeLeft.setPower(0);
+        intakeRight.setPower(0);
+    }
 
     public void leftPower(double power)
     {
@@ -168,10 +176,6 @@ public class robot extends LinearOpMode
         double ticks = (mm / 2.955);
         return ticks;
     }
-
-
-
-
 
     public void runOpMode() throws InterruptedException{}
 }

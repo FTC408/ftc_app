@@ -30,6 +30,8 @@ public class autoBlue extends robot
         forward(0.5, 432);
         forward(0, 0);
         sleep(500);
+
+        placeBlock();
     }
 }
 
