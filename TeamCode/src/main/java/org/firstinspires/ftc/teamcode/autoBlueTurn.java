@@ -23,15 +23,21 @@ public class autoBlueTurn extends robot
         forward(0);
         sleep(500);
 
-        turn(0.5,-90);
+        turn(0.5,-82);
         forward(0);
         sleep(500);
 
-        forward(0.5,457);
+        forward(0.5,420);
         forward(0);
         sleep(500);
 
         placeBlock();
+
+        forward(-0.5, 100);
+        forward(0);
+        sleep(1000);
+        forward(0.5, 160);
+        forward(0);
 
     }
 }

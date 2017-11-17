@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * Created by Robotics on 10/26/2017.
  */
 @TeleOp(name="Mecanum", group="Linear Opmode")
+@Disabled
 public class mecanumTest extends LinearOpMode {
     // Here is a change
     //Create variables and hardware

@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by Austin on 11/14/2017.
@@ -12,52 +14,141 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class robot extends LinearOpMode
 {
-    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB;
-    ColorSensor color;
+    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator;
+    ColorSensor colorLeft, colorRight;
+    DistanceSensor sensorDistanceLeft, sensorDistanceRight;
     CRServo intakeRight, intakeLeft;
-    Float left, right;
-    double ticksPerRev = 288;
-    double gearRatio = 1.33;
-    double diameter = 101.6;
+    Servo armRight, armLeft;
 
     public void init(int zed){
-    //Initilization Procedures
-    //Configuration in the phone, this allows the motors to control physical objects that the phone is connected to
+        //Initilization Procedures
+        // Configuration in the phone, this allows the motors to control physical objects that the phone is connected to
 
-    leftDriveF = hardwareMap.dcMotor.get("leftDriveF");
-    leftDriveB = hardwareMap.dcMotor.get("leftDriveB");
+        leftDriveF = hardwareMap.dcMotor.get("leftDriveF");
+        leftDriveB = hardwareMap.dcMotor.get("leftDriveB");
+        rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
+        rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
+        elevator =  hardwareMap.dcMotor.get("elevator");
 
-    rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
-    rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
+        intakeRight = hardwareMap.crservo.get("intakeRight");
+        intakeLeft = hardwareMap.crservo.get("intakeLeft");
 
-    intakeRight = hardwareMap.crservo.get("intakeRight");
-    intakeLeft = hardwareMap.crservo.get("intakeLeft");
-
-    //color = hardwareMap.colorSensor.get("color");
-
-    //color.enableLed(false);
+        armRight = hardwareMap.servo.get("armRight");
+        armLeft = hardwareMap.servo.get("armLeft");
 
         rightDriveB.setDirection(DcMotorSimple.Direction.REVERSE);
         rightDriveF.setDirection(DcMotorSimple.Direction.REVERSE);
-
         leftDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        // get a reference to the color sensor
+        colorLeft = hardwareMap.get(ColorSensor.class, "colorLeft");
+        colorRight = hardwareMap.get(ColorSensor.class, "colorRight");
+
+        // get a reference to the distance sensor that shares the same name.
+        sensorDistanceLeft = hardwareMap.get(DistanceSensor.class, "colorLeft");
+        sensorDistanceRight = hardwareMap.get(DistanceSensor.class, "colorRight");
+
+        colorLeft.enableLed(false);
+        colorRight.enableLed(false);
+
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftDriveB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        armRight.setPosition(0.27);
+        armLeft.setPosition(0.51);
+
     }
 
     public void placeBlock()
     {
-        intakeLeft.setPower(-1);
-        intakeRight.setPower(1);
+        intakeLeft.setPower(1);
+        intakeRight.setPower(-1);
         sleep(1500);
         intakeLeft.setPower(0);
         intakeRight.setPower(0);
+    }
+
+    //If red == true, on red side, else on blue side
+      public void jewel(boolean red)
+    {
+        if (red == true) //Wanted Red
+        {
+            armRight.setPosition(0.75);
+            sleep(1000);
+            //If Red
+            if (ColorTest(colorRight) == 1)
+            {
+                forward(-0.25, 50);
+                forward(0); sleep(500);
+                forward(0.25, 50);
+                forward(0); sleep(500);
+                //Away from color sensor
+            }
+            //If blue
+            else if (ColorTest(colorRight) == 0)
+            {
+                forward(0.25, 50);
+                forward(0); sleep(500);
+                forward(-0.25, 50);
+                forward(0); sleep(500);
+                //Towards color sensor
+            }
+            //If none
+            else if (ColorTest(colorRight) == 0.5)
+            {
+                //Skip selective action
+            }
+            armRight.setPosition(0.27);
+            sleep(1000);
+        }
+        else //Wanted Blue
+        {
+            armLeft.setPosition(0.1);
+            sleep(1000);
+            //If Red
+            if (ColorTest(colorLeft) == 1)
+            {
+                forward(0.25, 50);
+                forward(0); sleep (500);
+                forward(-0.25, 50);
+                forward(0); sleep(500);
+                //Away from color sensor
+            }
+            //If blue
+            else if (ColorTest(colorLeft) == 0)
+            {
+                forward(-0.25, 50);
+                forward(0); sleep(500);
+                forward(0.25, 50);
+                forward(0); sleep(500);
+                //Towards color sensor
+            }
+            //If none
+            else if (ColorTest(colorLeft) == 0.5)
+            {
+                //Skip selective action
+            }
+            armLeft.setPosition(0.51);
+            sleep(1000);
+        }
+    }
+    //Returns 1 if red, 0 if blue, 0.5 if neither
+    public double ColorTest(ColorSensor color)
+    {
+        if (color.red() > color.blue())
+        {
+            return 1;
+        }
+        if (color.blue() > color.red())
+        {
+            return 0;
+        }
+        return 0.5;
     }
 
     public void leftPower(double power)
@@ -102,7 +193,7 @@ public class robot extends LinearOpMode
         double diameter = 245 * 2; //245 mm radius
         int pos = leftDriveF.getCurrentPosition();
         double Circumfrence = Math.PI * diameter;
-        double distance = (degrees * Circumfrence) /180;
+        double distance = (Math.abs(degrees) * Circumfrence) /180;
 
         if (degrees >= 0) {
             while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(distance))) {
@@ -178,4 +269,53 @@ public class robot extends LinearOpMode
     }
 
     public void runOpMode() throws InterruptedException{}
+
+    //Updates the telemetry data of the robot so we can see what is going on with the sensors while driving
+    public void telemetry ()
+    {
+        //get position
+        telemetry.addData("Motor Positions", "");
+        telemetry.addData("Right Back Motor Position: ", rightDriveB.getCurrentPosition());
+        telemetry.addData("Right Front Motor Position: ", rightDriveF.getCurrentPosition());
+        telemetry.addData("Left Back Motor Position: ", leftDriveB.getCurrentPosition());
+        telemetry.addData("Left Front Motor Position: ", leftDriveF.getCurrentPosition());
+        telemetry.addData("Elevator Position: ", elevator.getCurrentPosition());
+        telemetry.addData("", "");
+
+        //get power
+        telemetry.addData("Motor Powers", "");
+        telemetry.addData("Right Back Motor Power: ", rightDriveB.getPower());
+        telemetry.addData("Right Front Motor Power: ", rightDriveF.getPower());
+        telemetry.addData("Left Back Motor Power: ", leftDriveB.getPower());
+        telemetry.addData("Left Front Motor Power: ", leftDriveF.getPower());
+        telemetry.addData("", "");
+
+        if (colorLeft.red() > colorLeft.blue())
+        {
+            telemetry.addData("Color Left: ", "Red");
+        }
+        if (colorLeft.red() < colorLeft.blue())
+        {
+            telemetry.addData("Color Left: ", "Blue");
+        }
+        if (colorLeft.red() == colorLeft.blue())
+        {
+            telemetry.addData("Color Left: ", "Neither");
+        }
+
+        if (colorRight.red() > colorRight.blue())
+        {
+            telemetry.addData("Color Right: ", "Red");
+        }
+        if (colorRight.red() < colorRight.blue())
+        {
+            telemetry.addData("Color Right: ", "Blue");
+        }
+        if (colorRight.red() == colorRight.blue())
+        {
+            telemetry.addData("Color Right: ", "Neither");
+        }
+
+        telemetry.update();
+    }
 }

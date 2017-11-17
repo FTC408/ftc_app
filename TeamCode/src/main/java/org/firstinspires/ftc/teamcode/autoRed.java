@@ -22,15 +22,22 @@ public class autoRed extends robot
         forward(0);
         sleep(500);
 
-        strafe(-0.5, 331);
+        strafe(-0.5, 800);
         forward(0);
         sleep(500);
 
-        forward(0.5, 432);
+        forward(0.5, 160);
         forward(0);
         sleep(500);
 
         placeBlock();
+
+        forward(-0.5, 100);
+        forward(0);
+        sleep(1000);
+        forward(0.5, 160);
+        forward(0);
+
 
     }
 }

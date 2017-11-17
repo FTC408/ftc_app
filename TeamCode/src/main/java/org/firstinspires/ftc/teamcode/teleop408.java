@@ -1,56 +1,36 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.ams.AMSColorSensor;
+import com.qualcomm.hardware.lynx.LynxI2cColorRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 /**
  * Created by Robotics on 10/26/2017.
  */
 @TeleOp(name="TeleOp", group="Linear Opmode")
-public class teleop408 extends LinearOpMode {
-    // Here is a change
-    //Create variables and hardware
-    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator;
-    CRServo intakeRight, intakeLeft;
-
-    double ticksPerRev = 288, gearRatio = 1.33, diameter = 101.6;
+public class teleop408 extends robot {
 
     @Override
     public void runOpMode() throws InterruptedException
     {
-        //Initilization Procedures
-        //Configuration in the phone, this allows the motors to control physical objects that the phone is connected to
-        leftDriveF = hardwareMap.dcMotor.get("leftDriveF");
-        leftDriveB = hardwareMap.dcMotor.get("leftDriveB");
-        rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
-        rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
-        elevator =  hardwareMap.dcMotor.get("elevator");
-
-        intakeRight = hardwareMap.crservo.get("intakeRight");
-        intakeLeft = hardwareMap.crservo.get("intakeLeft");
-
-        rightDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        leftDriveB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightDriveB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        init(0);
 
         waitForStart(); //Program is setup by everything above this, wait until play is pressed on the phone
 
         while (opModeIsActive())
         {
-            mecanumDrive(); //Controls the drivetrain. See mecanumDrive method below. This is here for the sake of navigational simplicity. I don't think
+            //mecanumDrive(); //Controls the drivetrain. See mecanumDrive method below. This is here for the sake of navigational simplicity. I don't think
             //that the code for mecanum navigation is going to change all that much so I don't really need to see it unless I
             //want to. Also it is easier to not get if statements mixed up this way, as it can be hard to tell where the control
             //For one thing ends and another begins
 
+            modifiedMecanum();
 
             // Control Vertical Elevator
             elevator.setPower(0);
@@ -67,6 +47,17 @@ public class teleop408 extends LinearOpMode {
                elevator.setPower(0);
            }
 
+           if (gamepad1.a)
+           {
+               armRight.setPosition(0.7);
+               armLeft.setPosition(0.15);
+           }
+
+           if (gamepad1.b)
+           {
+               armRight.setPosition(0.27);
+               armLeft.setPosition(0.51);
+           }
 
 
 
@@ -76,13 +67,13 @@ public class teleop408 extends LinearOpMode {
 
             if (gamepad1.right_trigger >= 0.2) //If right trigger is pressed, intake pulls in, so right bump and trig are up and in
             {
-                intakeLeft.setPower(1);
-                intakeRight.setPower(-1);
+                intakeLeft.setPower(-1);
+                intakeRight.setPower(1);
             }
             if (gamepad1.left_trigger >= 0.2) //If left trigger is pressed, intake pushes out
             {
-                intakeLeft.setPower(-1);
-                intakeRight.setPower(1);
+                intakeLeft.setPower(1);
+                intakeRight.setPower(-1);
             }
             if (gamepad1.right_trigger >= 0.2 && gamepad1.left_trigger >= 0.2) //If both, do nothing
             {
@@ -92,17 +83,49 @@ public class teleop408 extends LinearOpMode {
 
 
 
-            telemetry(); //Updates telemetry. See telemetry method below
+           // telemetry(); //Updates telemetry. See telemetry method below
 
         }
     }
 
+    //New control for the drive train
+    public void modifiedMecanum()
+    {
+        if (gamepad1.left_stick_y >= 0.2)
+            leftPower(gamepad1.left_stick_y);
+        else
+            leftPower(0);
+        if (gamepad1.right_stick_y >= 0.2)
+            rightPower(gamepad1.right_stick_y);
+        else
+            rightPower(0);
+        if(gamepad1.right_trigger >= 0.2)
+            strafeRight(gamepad1.right_trigger);
+        else if (gamepad1.left_trigger >= 0.2)
+            strafeLeft(gamepad1.left_trigger);
+    }
+
+
     //Controls the drivetrain
     public void mecanumDrive()
     {
+
+        boolean toggle = true;
+
+        if (gamepad1.b)
+        {
+            toggle = !toggle;
+        }
+
         //Finds the "hypotenuse" if you will, of the triangle of x and y values that is created when the joystick is moved
         double magnitudeLeft = Math.sqrt(Math.pow(gamepad1.left_stick_y,2)+Math.pow(gamepad1.left_stick_x,2));
         double magnitudeRight = Math.sqrt(Math.pow(gamepad1.right_stick_y,2)+Math.pow(gamepad1.right_stick_x,2));
+
+        if (toggle == false)
+        {
+            magnitudeLeft /= 2;
+            magnitudeRight /= 2;
+        }
 
         //These help record whether x is positive or negative
         boolean left, right;
@@ -164,44 +187,44 @@ public class teleop408 extends LinearOpMode {
 
         //R-forward
         if (((Math.PI/4 <= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) < (Math.PI)/2)) && right == true) {
-            rightDriveF.setPower(magnitudeRight);
-            rightDriveB.setPower(magnitudeRight);
+            rightDriveF.setPower(-magnitudeRight);
+            rightDriveB.setPower(-magnitudeRight);
         }
 
         if (((Math.PI/4 <= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) < (Math.PI)/2)) && right == false) {
-            rightDriveF.setPower(-magnitudeRight);
-            rightDriveB.setPower(-magnitudeRight);
+            rightDriveF.setPower(magnitudeRight);
+            rightDriveB.setPower(magnitudeRight);
         }
 
         //Inverse tangent approaches asymptotes at pi over two and negative pi over two, this gives that asymptote a definition
         //so that the robot won't simply stop at these values
         if (gamepad1.right_stick_x == 0)
         {
-            rightDriveF.setPower(magnitudeRight * gamepad1.right_stick_y);
-            rightDriveB.setPower(magnitudeRight * gamepad1.right_stick_y);
+            rightDriveF.setPower(-magnitudeRight * gamepad1.right_stick_y);
+            rightDriveB.setPower(-magnitudeRight * gamepad1.right_stick_y);
         }
 
         //R-right
         if (((Math.PI/4 > Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) > (-Math.PI)/4)) && right == true) {
-            rightDriveF.setPower(magnitudeRight);
-            rightDriveB.setPower(-magnitudeRight);
+            rightDriveF.setPower(-magnitudeRight);
+            rightDriveB.setPower(magnitudeRight);
         }
 
         //R-left
         if (((Math.PI/4 > Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) > (-Math.PI)/4)) && right == false) {
-            rightDriveF.setPower(-magnitudeRight);
-            rightDriveB.setPower(magnitudeRight);
+            rightDriveF.setPower(magnitudeRight);
+            rightDriveB.setPower(-magnitudeRight);
         }
 
         //R-back
         if (((-Math.PI/4 >= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) > (-Math.PI)/2)) && right == true) {
-            rightDriveF.setPower(-magnitudeRight);
-            rightDriveB.setPower(-magnitudeRight);
+            rightDriveF.setPower(magnitudeRight);
+            rightDriveB.setPower(magnitudeRight);
         }
 
         if (((-Math.PI/4 >= Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) && Math.atan(gamepad1.right_stick_y/gamepad1.right_stick_x) > (-Math.PI)/2)) && right == false) {
-            rightDriveF.setPower(magnitudeRight);
-            rightDriveB.setPower(magnitudeRight);
+            rightDriveF.setPower(-magnitudeRight);
+            rightDriveB.setPower(-magnitudeRight);
         }
 
         //This sets the power of the motors to zero if the value that they are being driven by is less than 0.2
@@ -219,27 +242,6 @@ public class teleop408 extends LinearOpMode {
         }
     }
 
-    //Updates the telemetry data of the robot so we can see what is going on with the sensors while driving
-    public void telemetry ()
-    {
-        //get position
-        telemetry.addData("Motor Positions", "");
-        telemetry.addData("Right Back Motor Position: ", rightDriveB.getCurrentPosition());
-        telemetry.addData("Right Front Motor Position: ", rightDriveF.getCurrentPosition());
-        telemetry.addData("Left Back Motor Position: ", leftDriveB.getCurrentPosition());
-        telemetry.addData("Left Front Motor Position: ", leftDriveF.getCurrentPosition());
-        telemetry.addData("Elevator Position: ", elevator.getCurrentPosition());
-        telemetry.addData("", "");
 
-        //get power
-        telemetry.addData("Motor Powers", "");
-        telemetry.addData("Right Back Motor Power: ", rightDriveB.getPower());
-        telemetry.addData("Right Front Motor Power: ", rightDriveF.getPower());
-        telemetry.addData("Left Back Motor Power: ", leftDriveB.getPower());
-        telemetry.addData("Left Front Motor Power: ", leftDriveF.getPower());
-        telemetry.addData("", "");
-
-        telemetry.update();
-    }
 }
 

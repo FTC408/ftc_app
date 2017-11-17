@@ -32,6 +32,12 @@ public class autoRedTurn extends robot
 
         placeBlock();
 
+        forward(-0.5, 100);
+        forward(0);
+        sleep(1000);
+        forward(0.5, 160);
+        forward(0);
+
     }
 }
 
