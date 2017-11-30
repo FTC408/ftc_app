@@ -18,25 +18,28 @@ public class autoRed extends robot
         init(0);
         waitForStart();
 
+        jewel(true);
+
         forward(0.5,711);
         forward(0);
         sleep(500);
 
-        strafe(-0.5, 800);
+        strafe(-0.5, 740);
         forward(0);
         sleep(500);
 
-        forward(0.5, 160);
+        forward(0.5, 130);
         forward(0);
         sleep(500);
 
         placeBlock();
 
-        forward(-0.5, 100);
+        forward(0.5, 100);
         forward(0);
         sleep(1000);
-        forward(0.5, 160);
+        forward(-0.5, 160);
         forward(0);
+
 
 
     }

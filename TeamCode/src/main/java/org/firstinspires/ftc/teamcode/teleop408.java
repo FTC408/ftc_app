@@ -34,48 +34,56 @@ public class teleop408 extends robot {
 
             // Control Vertical Elevator
             elevator.setPower(0);
-           if(gamepad1.right_bumper) //If the up button is pressed, the elevator will go up
+            elevator2.setPower(0);
+           if(gamepad2.right_bumper) //If the up button is pressed, the elevator will go up
            {
                elevator.setPower(0.5);
+               elevator2.setPower(-0.5);
            }
-           if(gamepad1.left_bumper) //If the down button is pressed, the elevator will go down
+           if(gamepad2.left_bumper) //If the down button is pressed, the elevator will go down
            {
                elevator.setPower(-0.5);
+               elevator2.setPower(0.5);
            }
-           if (gamepad1.left_bumper && gamepad1.right_bumper) //If both, do nothing
+           if (gamepad2.left_bumper && gamepad2.right_bumper) //If both, do nothing
            {
                elevator.setPower(0);
+               elevator2.setPower(0);
            }
 
-           if (gamepad1.a)
+           if (gamepad2.a)
            {
-               armRight.setPosition(0.7);
-               armLeft.setPosition(0.15);
+               armRight.setPosition(0.75);
+               armLeft.setPosition(0.4);
            }
 
-           if (gamepad1.b)
+           if (gamepad2.b)
            {
-               armRight.setPosition(0.27);
-               armLeft.setPosition(0.51);
+               armRight.setPosition(0.28);
+               armLeft.setPosition(0.8);
            }
 
 
 
-            //Control Intake
-            intakeLeft.setPower(0);
-            intakeRight.setPower(0);
 
-            if (gamepad1.right_trigger >= 0.2) //If right trigger is pressed, intake pulls in, so right bump and trig are up and in
+
+            if (gamepad2.right_trigger >= 0.2) //If right trigger is pressed, intake pulls in, so right bump and trig are up and in
             {
                 intakeLeft.setPower(-1);
                 intakeRight.setPower(1);
             }
-            if (gamepad1.left_trigger >= 0.2) //If left trigger is pressed, intake pushes out
+            if (gamepad2.left_trigger >= 0.2) //If left trigger is pressed, intake pushes out
             {
                 intakeLeft.setPower(1);
                 intakeRight.setPower(-1);
             }
-            if (gamepad1.right_trigger >= 0.2 && gamepad1.left_trigger >= 0.2) //If both, do nothing
+            if (gamepad2.right_trigger >= 0.2 && gamepad2.left_trigger >= 0.2) //If both, do nothing
+            {
+                intakeLeft.setPower(0);
+                intakeRight.setPower(0);
+            }
+
+            if (gamepad2.right_trigger < 0.2 && gamepad2.left_trigger < 0.2) //If both, do nothing
             {
                 intakeLeft.setPower(0);
                 intakeRight.setPower(0);
@@ -91,16 +99,25 @@ public class teleop408 extends robot {
     //New control for the drive train
     public void modifiedMecanum()
     {
-        if (gamepad1.left_stick_y >= 0.2)
-            leftPower(gamepad1.left_stick_y);
-        else
+        if (Math.abs(gamepad1.left_stick_y) >= 0.2)
+        {
+            leftPower(-gamepad1.left_stick_y);
+        }
+
+        if (Math.abs(gamepad1.left_stick_y) < 0.2 && gamepad1.right_trigger < 0.2 && gamepad1.left_trigger < 0.2) {
             leftPower(0);
-        if (gamepad1.right_stick_y >= 0.2)
-            rightPower(gamepad1.right_stick_y);
-        else
+        }
+        if (Math.abs(gamepad1.right_stick_y) >= 0.2) {
+            rightPower(-gamepad1.right_stick_y);
+        }
+        if (Math.abs(gamepad1.right_stick_y) < 0.2 && gamepad1.right_trigger < 0.2 && gamepad1.left_trigger < 0.2)
+        {
             rightPower(0);
+        }
         if(gamepad1.right_trigger >= 0.2)
+        {
             strafeRight(gamepad1.right_trigger);
+        }
         else if (gamepad1.left_trigger >= 0.2)
             strafeLeft(gamepad1.left_trigger);
     }

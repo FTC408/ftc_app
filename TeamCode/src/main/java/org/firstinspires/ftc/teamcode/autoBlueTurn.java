@@ -19,6 +19,8 @@ public class autoBlueTurn extends robot
         init(0);
         waitForStart();
 
+        jewel(false);
+
         forward(0.5, 914);
         forward(0);
         sleep(500);
@@ -27,17 +29,19 @@ public class autoBlueTurn extends robot
         forward(0);
         sleep(500);
 
-        forward(0.5,420);
+        forward(0.5,200);
         forward(0);
         sleep(500);
 
         placeBlock();
 
-        forward(-0.5, 100);
+        forward(0.5, 100);
         forward(0);
         sleep(1000);
-        forward(0.5, 160);
+        forward(-0.5, 160);
         forward(0);
+        sleep(1000);
+
 
     }
 }

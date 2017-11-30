@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * Created by Austin on 10/25/2017.
  */
 @Autonomous(name= "Auto Blue", group = "Auto")
+@Disabled
 public class autoBlue extends robot
 {
 
@@ -18,6 +20,8 @@ public class autoBlue extends robot
     {
         init(0);
         waitForStart();
+
+        jewel(false);
 
         forward(0.5, 711);
         forward(0, 0);
@@ -33,10 +37,13 @@ public class autoBlue extends robot
 
         placeBlock();
 
-        forward(-0.5, 100);
+        forward(0.5, 100);
         forward(0);
         sleep(1000);
-        forward(0.5, 160);
+        forward(-0.5, 160);
+        forward(0);
+        sleep(1000);
+        forward(0.5, 100);
         forward(0);
     }
 }

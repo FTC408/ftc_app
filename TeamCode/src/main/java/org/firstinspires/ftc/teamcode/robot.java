@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class robot extends LinearOpMode
 {
-    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator;
+    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator, elevator2;
     ColorSensor colorLeft, colorRight;
     DistanceSensor sensorDistanceLeft, sensorDistanceRight;
     CRServo intakeRight, intakeLeft;
@@ -29,6 +29,7 @@ public class robot extends LinearOpMode
         rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
         rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
         elevator =  hardwareMap.dcMotor.get("elevator");
+        elevator2 = hardwareMap.dcMotor.get("elevator2");
 
         intakeRight = hardwareMap.crservo.get("intakeRight");
         intakeLeft = hardwareMap.crservo.get("intakeLeft");
@@ -59,8 +60,8 @@ public class robot extends LinearOpMode
         rightDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        armRight.setPosition(0.27);
-        armLeft.setPosition(0.51);
+        armRight.setPosition(0.28);
+        armLeft.setPosition(0.8);
 
     }
 
@@ -71,6 +72,7 @@ public class robot extends LinearOpMode
         sleep(1500);
         intakeLeft.setPower(0);
         intakeRight.setPower(0);
+
     }
 
     //If red == true, on red side, else on blue side
@@ -83,18 +85,22 @@ public class robot extends LinearOpMode
             //If Red
             if (ColorTest(colorRight) == 1)
             {
-                forward(-0.25, 50);
+                forward(0.3, 50);
                 forward(0); sleep(500);
-                forward(0.25, 50);
+                armRight.setPosition(0.28);
+                sleep(1000);
+                forward(-0.3, 50);
                 forward(0); sleep(500);
                 //Away from color sensor
             }
             //If blue
             else if (ColorTest(colorRight) == 0)
             {
-                forward(0.25, 50);
+                forward(-0.3, 50);
                 forward(0); sleep(500);
-                forward(-0.25, 50);
+                armRight.setPosition(0.28);
+                sleep(1000);
+                forward(0.3, 50);
                 forward(0); sleep(500);
                 //Towards color sensor
             }
@@ -103,28 +109,32 @@ public class robot extends LinearOpMode
             {
                 //Skip selective action
             }
-            armRight.setPosition(0.27);
+            armRight.setPosition(0.28);
             sleep(1000);
         }
         else //Wanted Blue
         {
-            armLeft.setPosition(0.1);
+            armLeft.setPosition(0.4);
             sleep(1000);
             //If Red
             if (ColorTest(colorLeft) == 1)
             {
-                forward(0.25, 50);
+                forward(-0.3, 60);
                 forward(0); sleep (500);
-                forward(-0.25, 50);
+                armLeft.setPosition(0.8);
+                sleep(1000);
+                forward(0.3, 60);
                 forward(0); sleep(500);
                 //Away from color sensor
             }
             //If blue
             else if (ColorTest(colorLeft) == 0)
             {
-                forward(-0.25, 50);
+                forward(0.3, 60);
                 forward(0); sleep(500);
-                forward(0.25, 50);
+                armLeft.setPosition(0.8);
+                sleep(1000);
+                forward(-0.3, 60);
                 forward(0); sleep(500);
                 //Towards color sensor
             }
@@ -133,7 +143,7 @@ public class robot extends LinearOpMode
             {
                 //Skip selective action
             }
-            armLeft.setPosition(0.51);
+            armLeft.setPosition(0.8);
             sleep(1000);
         }
     }
