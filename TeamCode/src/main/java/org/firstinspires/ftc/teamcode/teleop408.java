@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.util.Range;
 
 /**
  * Created by Robotics on 10/26/2017.
@@ -25,76 +26,91 @@ public class teleop408 extends robot {
 
         while (opModeIsActive())
         {
-            //mecanumDrive(); //Controls the drivetrain. See mecanumDrive method below. This is here for the sake of navigational simplicity. I don't think
-            //that the code for mecanum navigation is going to change all that much so I don't really need to see it unless I
-            //want to. Also it is easier to not get if statements mixed up this way, as it can be hard to tell where the control
-            //For one thing ends and another begins
+            megaModifiedMecanum();
 
-            modifiedMecanum();
+            elevatorControl();
 
-            // Control Vertical Elevator
-            elevator.setPower(0);
-            elevator2.setPower(0);
-           if(gamepad2.right_bumper) //If the up button is pressed, the elevator will go up
-           {
-               elevator.setPower(0.5);
-               elevator2.setPower(-0.5);
-           }
-           if(gamepad2.left_bumper) //If the down button is pressed, the elevator will go down
-           {
-               elevator.setPower(-0.5);
-               elevator2.setPower(0.5);
-           }
-           if (gamepad2.left_bumper && gamepad2.right_bumper) //If both, do nothing
-           {
-               elevator.setPower(0);
-               elevator2.setPower(0);
-           }
-
-           if (gamepad2.a)
-           {
-               armRight.setPosition(0.75);
-               armLeft.setPosition(0.4);
-           }
-
-           if (gamepad2.b)
-           {
-               armRight.setPosition(0.28);
-               armLeft.setPosition(0.8);
-           }
-
-
-
-
-
-            if (gamepad2.right_trigger >= 0.2) //If right trigger is pressed, intake pulls in, so right bump and trig are up and in
-            {
-                intakeLeft.setPower(-1);
-                intakeRight.setPower(1);
-            }
-            if (gamepad2.left_trigger >= 0.2) //If left trigger is pressed, intake pushes out
-            {
-                intakeLeft.setPower(1);
-                intakeRight.setPower(-1);
-            }
-            if (gamepad2.right_trigger >= 0.2 && gamepad2.left_trigger >= 0.2) //If both, do nothing
-            {
-                intakeLeft.setPower(0);
-                intakeRight.setPower(0);
-            }
-
-            if (gamepad2.right_trigger < 0.2 && gamepad2.left_trigger < 0.2) //If both, do nothing
-            {
-                intakeLeft.setPower(0);
-                intakeRight.setPower(0);
-            }
-
-
-
-           // telemetry(); //Updates telemetry. See telemetry method below
+            jewelArmControl();
 
         }
     }
+
+    public void elevatorControl()
+    {
+        // Control Vertical Elevator
+        elevator.setPower(0);
+        elevator2.setPower(0);
+        if(gamepad2.right_bumper) //If the up button is pressed, the elevator will go up
+        {
+            elevator.setPower(0.5);
+            elevator2.setPower(-0.5);
+        }
+        if(gamepad2.left_bumper) //If the down button is pressed, the elevator will go down
+        {
+            elevator.setPower(-0.5);
+            elevator2.setPower(0.5);
+        }
+        if (gamepad2.left_bumper && gamepad2.right_bumper) //If both, do nothing
+        {
+            elevator.setPower(0);
+            elevator2.setPower(0);
+        }
+    }
+
+    public void intakeControl()
+    {
+        if (gamepad2.right_trigger >= 0.2) //If right trigger is pressed, intake pulls in, so right bump and trig are up and in
+        {
+            intakeLeft.setPower(-1);
+            intakeRight.setPower(1);
+        }
+        if (gamepad2.left_trigger >= 0.2) //If left trigger is pressed, intake pushes out
+        {
+            intakeLeft.setPower(1);
+            intakeRight.setPower(-1);
+        }
+        if (gamepad2.right_trigger >= 0.2 && gamepad2.left_trigger >= 0.2) //If both, do nothing
+        {
+            intakeLeft.setPower(0);
+            intakeRight.setPower(0);
+        }
+
+        if (gamepad2.right_trigger < 0.2 && gamepad2.left_trigger < 0.2) //If both, do nothing
+        {
+            intakeLeft.setPower(0);
+            intakeRight.setPower(0);
+        }
+    }
+
+    public void jewelArmControl()
+    {
+        if (gamepad2.a)
+        {
+            armRight.setPosition(0.75);
+            armLeft.setPosition(0.4);
+        }
+
+        if (gamepad2.b)
+        {
+            armRight.setPosition(0.28);
+            armLeft.setPosition(0.8);
+        }
+    }
+
+    //This is the code that Drew made for 407, and as it is far more concise than anything I have dreamt up, we'll try it out
+    public void megaModifiedMecanum()
+    {
+        double forward = gamepad1.right_stick_y;
+        double side = gamepad1.right_stick_x;
+        double rotate = gamepad1.left_stick_x;
+
+        rightDriveF.setPower(Range.clip(forward+side-rotate, -1, 1));
+        leftDriveF.setPower(Range.clip(forward-side+rotate, -1, 1));
+        rightDriveB.setPower(-Range.clip(forward-side-rotate, -1, 1));
+        leftDriveB.setPower(Range.clip(forward+side+rotate, -1, 1));
+
+    }
+
 
     //New control for the drive train
     public void modifiedMecanum()
