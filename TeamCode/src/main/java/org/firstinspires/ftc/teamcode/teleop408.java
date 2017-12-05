@@ -30,7 +30,9 @@ public class teleop408 extends robot {
 
             elevatorControl();
 
-            jewelArmControl();
+            intakeControl();
+
+            //jewelArmControl();
 
         }
     }
@@ -61,8 +63,8 @@ public class teleop408 extends robot {
     {
         if (gamepad2.right_trigger >= 0.2) //If right trigger is pressed, intake pulls in, so right bump and trig are up and in
         {
-            intakeLeft.setPower(-1);
-            intakeRight.setPower(1);
+            intakeLeft.setPower(1);
+            intakeRight.setPower(-1);
         }
         if (gamepad2.left_trigger >= 0.2) //If left trigger is pressed, intake pushes out
         {
@@ -82,7 +84,7 @@ public class teleop408 extends robot {
         }
     }
 
-    public void jewelArmControl()
+   /* public void jewelArmControl()
     {
         if (gamepad2.a)
         {
@@ -95,7 +97,7 @@ public class teleop408 extends robot {
             armRight.setPosition(0.28);
             armLeft.setPosition(0.8);
         }
-    }
+    }*/
 
     //This is the code that Drew made for 407, and as it is far more concise than anything I have dreamt up, we'll try it out
     public void megaModifiedMecanum()
@@ -106,7 +108,7 @@ public class teleop408 extends robot {
 
         rightDriveF.setPower(Range.clip(forward+side-rotate, -1, 1));
         leftDriveF.setPower(Range.clip(forward-side+rotate, -1, 1));
-        rightDriveB.setPower(-Range.clip(forward-side-rotate, -1, 1));
+        rightDriveB.setPower(Range.clip(forward-side-rotate, -1, 1));
         leftDriveB.setPower(Range.clip(forward+side+rotate, -1, 1));
 
     }

@@ -34,8 +34,8 @@ public class robot extends LinearOpMode
         intakeRight = hardwareMap.crservo.get("intakeRight");
         intakeLeft = hardwareMap.crservo.get("intakeLeft");
 
-        armRight = hardwareMap.servo.get("armRight");
-        armLeft = hardwareMap.servo.get("armLeft");
+       // armRight = hardwareMap.servo.get("armRight");
+        //armLeft = hardwareMap.servo.get("armLeft");
 
         rightDriveB.setDirection(DcMotorSimple.Direction.REVERSE);
         rightDriveF.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -45,23 +45,23 @@ public class robot extends LinearOpMode
         rightDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // get a reference to the color sensor
-        colorLeft = hardwareMap.get(ColorSensor.class, "colorLeft");
-        colorRight = hardwareMap.get(ColorSensor.class, "colorRight");
+        //colorLeft = hardwareMap.get(ColorSensor.class, "colorLeft");
+       // colorRight = hardwareMap.get(ColorSensor.class, "colorRight");
 
         // get a reference to the distance sensor that shares the same name.
-        sensorDistanceLeft = hardwareMap.get(DistanceSensor.class, "colorLeft");
-        sensorDistanceRight = hardwareMap.get(DistanceSensor.class, "colorRight");
+        //sensorDistanceLeft = hardwareMap.get(DistanceSensor.class, "colorLeft");
+       // sensorDistanceRight = hardwareMap.get(DistanceSensor.class, "colorRight");
 
-        colorLeft.enableLed(false);
-        colorRight.enableLed(false);
+        //colorLeft.enableLed(false);
+        //colorRight.enableLed(false);
 
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftDriveB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        armRight.setPosition(0.28);
-        armLeft.setPosition(0.8);
+       // armRight.setPosition(0.28);
+       // armLeft.setPosition(0.8);
 
     }
 
