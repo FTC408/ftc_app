@@ -106,7 +106,7 @@ public class teleop408 extends robot {
 
         rightDriveF.setPower(Range.clip(forward+side-rotate, -1, 1));
         leftDriveF.setPower(Range.clip(forward-side+rotate, -1, 1));
-        rightDriveB.setPower(-Range.clip(forward-side-rotate, -1, 1));
+        rightDriveB.setPower(Range.clip(forward-side-rotate, -1, 1));
         leftDriveB.setPower(Range.clip(forward+side+rotate, -1, 1));
 
     }
