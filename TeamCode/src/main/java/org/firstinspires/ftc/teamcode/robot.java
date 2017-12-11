@@ -20,6 +20,8 @@ public class robot extends LinearOpMode
     CRServo intakeRight, intakeLeft;
     Servo armRight, armLeft, outTake;
 
+    //int CLOSE = 0, MIDDLE = , FAR;
+
     public void init(int zed){
         //Initilization Procedures
         // Configuration in the phone, this allows the motors to control physical objects that the phone is connected to
@@ -242,16 +244,16 @@ public class robot extends LinearOpMode
 
     public void strafeRight(double power)
     {
-        leftDriveF.setPower(power);
-        leftDriveB.setPower(-power);
+        leftDriveF.setPower(-power);
+        leftDriveB.setPower(power);
         rightDriveF.setPower(-power);
         rightDriveB.setPower(power);
     }
 
     public void strafeLeft(double power)
     {
-        leftDriveF.setPower(-power);
-        leftDriveB.setPower(power);
+        leftDriveF.setPower(power);
+        leftDriveB.setPower(-power);
         rightDriveF.setPower(power);
         rightDriveB.setPower(-power);
     }
