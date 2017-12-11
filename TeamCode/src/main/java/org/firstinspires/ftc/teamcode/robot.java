@@ -18,7 +18,7 @@ public class robot extends LinearOpMode
     ColorSensor colorLeft, colorRight;
     DistanceSensor sensorDistanceLeft, sensorDistanceRight;
     CRServo intakeRight, intakeLeft;
-    Servo armRight, armLeft;
+    Servo armRight, armLeft, outTake;
 
     public void init(int zed){
         //Initilization Procedures
@@ -33,6 +33,8 @@ public class robot extends LinearOpMode
 
         intakeRight = hardwareMap.crservo.get("intakeRight");
         intakeLeft = hardwareMap.crservo.get("intakeLeft");
+
+        outTake = hardwareMap.servo.get("outTake");
 
        // armRight = hardwareMap.servo.get("armRight");
         //armLeft = hardwareMap.servo.get("armLeft");

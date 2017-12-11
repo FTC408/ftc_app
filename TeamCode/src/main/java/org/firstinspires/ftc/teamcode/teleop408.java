@@ -34,6 +34,15 @@ public class teleop408 extends robot {
 
             //jewelArmControl();
 
+            if (gamepad1.dpad_up)
+            {
+                outTake.setPosition(0);
+            }
+            else
+            {
+                outTake.setPosition(1);
+            }
+
         }
     }
 
