@@ -36,12 +36,17 @@ public class teleop408 extends robot {
 
             if (gamepad2.dpad_up) //Controls the servo at the top of the lift
             {
-                outTake.setPosition(1);
+                arm.setPower(1);
+            }
+            else if (gamepad2.dpad_down)
+            {
+                arm.setPower(-1);
             }
             else
             {
-                outTake.setPosition(0);
+                arm.setPower(0);
             }
+
 
         }
     }

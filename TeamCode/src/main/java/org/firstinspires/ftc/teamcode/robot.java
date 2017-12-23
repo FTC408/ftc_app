@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class robot extends LinearOpMode
 {
-    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator, elevator2;
+    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator, elevator2, arm;
     ColorSensor colorLeft, colorRight;
     DistanceSensor sensorDistanceLeft, sensorDistanceRight;
     CRServo intakeRight, intakeLeft;
@@ -32,6 +32,7 @@ public class robot extends LinearOpMode
         rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
         elevator =  hardwareMap.dcMotor.get("elevator");
         elevator2 = hardwareMap.dcMotor.get("elevator2");
+        arm = hardwareMap.dcMotor.get("arm");
 
         intakeRight = hardwareMap.crservo.get("intakeRight");
         intakeLeft = hardwareMap.crservo.get("intakeLeft");
