@@ -8,6 +8,12 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+
 /**
  * Created by Austin on 10/25/2017.
  */
@@ -19,32 +25,22 @@ public class autoBlue extends robot
     public void runOpMode() throws InterruptedException
     {
         init(0);
+
         waitForStart();
+
+        int position = position();
 
         jewel(false);
 
-        forward(0.5, 711);
-        forward(0, 0);
-        sleep(500);
+        forward(1, 700); //Guesstimation
 
-        strafe(0.5, 330);
-        forward(0, 0);
-        sleep(500);
+        strafe(-1, 700); //Guesstimation, should go left
 
-        forward(0.5, 432);
-        forward(0, 0);
-        sleep(500);
+        strafe(1, cipher[position]);
 
-        placeBlock();
 
-        forward(0.5, 100);
-        forward(0);
-        sleep(1000);
-        forward(-0.5, 160);
-        forward(0);
-        sleep(1000);
-        forward(0.5, 100);
-        forward(0);
+
+
     }
 }
 

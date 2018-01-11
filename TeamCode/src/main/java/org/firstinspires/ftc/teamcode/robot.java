@@ -8,6 +8,14 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+
 /**
  * Created by Austin on 11/14/2017.
  */
@@ -15,17 +23,28 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class robot extends LinearOpMode
 {
     DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator, elevator2, arm;
-    ColorSensor colorLeft, colorRight;
-    DistanceSensor sensorDistanceLeft, sensorDistanceRight;
+    ColorSensor color;
+    DistanceSensor sensorDistance;
     CRServo intakeRight, intakeLeft;
-    Servo armRight, armLeft, outTake;
+    Servo jewel, clawPivot, claw;
 
-    //int CLOSE = 0, MIDDLE = , FAR;
+    //These are the values in mm of the close middle and far positions for placing the block from the starting point
+    //0 = close, 1 = middle, 2 = far, 3 = nothing
+    int[] cipher = {0, 178, 356, 0};
+
+    public static final String TAG = "Vuforia VuMark Sample";
+    OpenGLMatrix lastLocation = null;
+
+    /**
+     * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
+     * localization engine.
+     */
+    VuforiaLocalizer vuforia;
+
 
     public void init(int zed){
         //Initilization Procedures
         // Configuration in the phone, this allows the motors to control physical objects that the phone is connected to
-
         leftDriveF = hardwareMap.dcMotor.get("leftDriveF");
         leftDriveB = hardwareMap.dcMotor.get("leftDriveB");
         rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
@@ -37,10 +56,10 @@ public class robot extends LinearOpMode
         intakeRight = hardwareMap.crservo.get("intakeRight");
         intakeLeft = hardwareMap.crservo.get("intakeLeft");
 
-        outTake = hardwareMap.servo.get("outTake");
+        clawPivot = hardwareMap.servo.get("clawPivot");
+        claw = hardwareMap.servo.get("claw");
 
-       // armRight = hardwareMap.servo.get("armRight");
-        //armLeft = hardwareMap.servo.get("armLeft");
+        jewel = hardwareMap.servo.get("jewel");
 
         rightDriveB.setDirection(DcMotorSimple.Direction.REVERSE);
         rightDriveF.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -50,26 +69,67 @@ public class robot extends LinearOpMode
         rightDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // get a reference to the color sensor
-        //colorLeft = hardwareMap.get(ColorSensor.class, "colorLeft");
-       // colorRight = hardwareMap.get(ColorSensor.class, "colorRight");
+        color = hardwareMap.get(ColorSensor.class, "colorLeft");
 
         // get a reference to the distance sensor that shares the same name.
-        //sensorDistanceLeft = hardwareMap.get(DistanceSensor.class, "colorLeft");
-       // sensorDistanceRight = hardwareMap.get(DistanceSensor.class, "colorRight");
+        sensorDistance = hardwareMap.get(DistanceSensor.class, "colorLeft");
+        color.enableLed(false);
 
-        //colorLeft.enableLed(false);
-        //colorRight.enableLed(false);
-
+        //Configures the motors to automatically brake when they have no input
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftDriveB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-       // armRight.setPosition(0.28);
-       // armLeft.setPosition(0.8);
-
+        //Sets the jewel arm position to the best spot
+        jewel.setPosition(0.28);
     }
 
+    public VuforiaTrackable relicTemplate()
+    {
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();//Configures Vuforia parameters
+
+        parameters.vuforiaLicenseKey = "AcmoujL/////AAAAGfYN1VWHOESQp02jdVbkpgRIroIXb6bGJbVg+YmQNOR1Utps1uBrE31QT5LTDRtXTqfGsXa1UDAVYDCODNbSDvvBqaeL+InYfonHHdT5uSQCUlOM5KznGi0nxg87OadM5azVuy9kk+uc0w3lmN/8PDzgxO14VRINXAf3w5AkMzhZAhKbzOH3PXYD15b9WsxeBfgDLHahE3Utn1i5u4EYZwizxBCa2Kg4HvtuhNLPBW7qjAfU+VEEsXHXCsJXU16uPaSQoPGWQsgZF729eI7aKmFa/zImSqxi1LizI6Xx8GkLOINg9j+gOixUkF115rrI5Lg4in21bKiR51FR9WmTunV8e/gGPBPrcfGFRP77fzsa";
+
+
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;//Configures which camera the program will use
+        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);//Uses those parameters we just configured
+
+        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");//Loads the picture options
+        VuforiaTrackable relicTemplate = relicTrackables.get(0);// I think this continues to load the trackables
+        relicTemplate.setName("relicVuMarkTemplate");// This gives it a name or something
+
+        return relicTemplate;
+    }
+
+    //0= left, 1= center, 2= right, 3= unknown
+    public int position()//You need to start from the left side of the cryptobox for this to work
+    {
+        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate());
+        sleep(2000);
+
+        if (vuMark == RelicRecoveryVuMark.CENTER)
+        {
+            telemetry.addData("VuMark", "Center");
+            return 1;
+        }
+        else if (vuMark == RelicRecoveryVuMark.RIGHT)
+        {
+            telemetry.addData("VuMark", "Right");
+            return 2;
+        }
+        else if (vuMark == RelicRecoveryVuMark.LEFT)
+        {
+            telemetry.addData("VuMark", "Left");
+            return 0;
+        }
+        else{
+            telemetry.addData("VuMark", "not visible");
+            return 3;
+        }
+    }
+
+    //Code for placing a block
     public void placeBlock()
     {
         intakeLeft.setPower(1);
@@ -77,7 +137,6 @@ public class robot extends LinearOpMode
         sleep(1500);
         intakeLeft.setPower(0);
         intakeRight.setPower(0);
-
     }
 
     //If red == true, on red side, else on blue side
@@ -85,70 +144,70 @@ public class robot extends LinearOpMode
     {
         if (red == true) //Wanted Red
         {
-            armRight.setPosition(0.75);
+            jewel.setPosition(0.75);
             sleep(1000);
             //If Red
-            if (ColorTest(colorRight) == 1)
+            if (ColorTest(color) == 1)
             {
                 forward(0.3, 50);
                 forward(0); sleep(500);
-                armRight.setPosition(0.28);
+                jewel.setPosition(0.28);
                 sleep(1000);
                 forward(-0.3, 50);
                 forward(0); sleep(500);
                 //Away from color sensor
             }
             //If blue
-            else if (ColorTest(colorRight) == 0)
+            else if (ColorTest(color) == 0)
             {
                 forward(-0.3, 50);
                 forward(0); sleep(500);
-                armRight.setPosition(0.28);
+                jewel.setPosition(0.28);
                 sleep(1000);
                 forward(0.3, 50);
                 forward(0); sleep(500);
                 //Towards color sensor
             }
             //If none
-            else if (ColorTest(colorRight) == 0.5)
+            else if (ColorTest(color) == 0.5)
             {
                 //Skip selective action
             }
-            armRight.setPosition(0.28);
+            jewel.setPosition(0.28);
             sleep(1000);
         }
         else //Wanted Blue
         {
-            armLeft.setPosition(0.4);
+            jewel.setPosition(0.4);
             sleep(1000);
             //If Red
-            if (ColorTest(colorLeft) == 1)
+            if (ColorTest(color) == 1)
             {
                 forward(-0.3, 60);
                 forward(0); sleep (500);
-                armLeft.setPosition(0.8);
+                jewel.setPosition(0.8);
                 sleep(1000);
                 forward(0.3, 60);
                 forward(0); sleep(500);
                 //Away from color sensor
             }
             //If blue
-            else if (ColorTest(colorLeft) == 0)
+            else if (ColorTest(color) == 0)
             {
                 forward(0.3, 60);
                 forward(0); sleep(500);
-                armLeft.setPosition(0.8);
+                jewel.setPosition(0.8);
                 sleep(1000);
                 forward(-0.3, 60);
                 forward(0); sleep(500);
                 //Towards color sensor
             }
             //If none
-            else if (ColorTest(colorLeft) == 0.5)
+            else if (ColorTest(color) == 0.5)
             {
                 //Skip selective action
             }
-            armLeft.setPosition(0.8);
+            jewel.setPosition(0.8);
             sleep(1000);
         }
     }
@@ -305,32 +364,18 @@ public class robot extends LinearOpMode
         telemetry.addData("Left Front Motor Power: ", leftDriveF.getPower());
         telemetry.addData("", "");
 
-        if (colorLeft.red() > colorLeft.blue())
+        if (color.red() > color.blue())
         {
             telemetry.addData("Color Left: ", "Red");
         }
-        if (colorLeft.red() < colorLeft.blue())
+        if (color.red() < color.blue())
         {
             telemetry.addData("Color Left: ", "Blue");
         }
-        if (colorLeft.red() == colorLeft.blue())
+        if (color.red() == color.blue())
         {
             telemetry.addData("Color Left: ", "Neither");
         }
-
-        if (colorRight.red() > colorRight.blue())
-        {
-            telemetry.addData("Color Right: ", "Red");
-        }
-        if (colorRight.red() < colorRight.blue())
-        {
-            telemetry.addData("Color Right: ", "Blue");
-        }
-        if (colorRight.red() == colorRight.blue())
-        {
-            telemetry.addData("Color Right: ", "Neither");
-        }
-
         telemetry.update();
     }
 }
