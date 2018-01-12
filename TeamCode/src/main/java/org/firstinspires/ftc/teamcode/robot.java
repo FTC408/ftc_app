@@ -149,23 +149,19 @@ public class robot extends LinearOpMode
             //If Red
             if (ColorTest(color) == 1)
             {
-                forward(0.3, 50);
-                forward(0); sleep(500);
+                turn(0.3, 20);
                 jewel.setPosition(0.28);
                 sleep(1000);
-                forward(-0.3, 50);
-                forward(0); sleep(500);
+                turn(0.3, -20);
                 //Away from color sensor
             }
             //If blue
             else if (ColorTest(color) == 0)
             {
-                forward(-0.3, 50);
-                forward(0); sleep(500);
+                turn(0.3, -20);
                 jewel.setPosition(0.28);
                 sleep(1000);
-                forward(0.3, 50);
-                forward(0); sleep(500);
+                turn(0.3, 20);
                 //Towards color sensor
             }
             //If none
@@ -178,36 +174,32 @@ public class robot extends LinearOpMode
         }
         else //Wanted Blue
         {
-            jewel.setPosition(0.4);
+            jewel.setPosition(0.75);
             sleep(1000);
             //If Red
             if (ColorTest(color) == 1)
             {
-                forward(-0.3, 60);
-                forward(0); sleep (500);
-                jewel.setPosition(0.8);
+                turn(0.3, -20);
+                jewel.setPosition(0.28);
                 sleep(1000);
-                forward(0.3, 60);
-                forward(0); sleep(500);
-                //Away from color sensor
+                turn(0.3, 20);
+                //Towards color sensor
             }
             //If blue
             else if (ColorTest(color) == 0)
             {
-                forward(0.3, 60);
-                forward(0); sleep(500);
-                jewel.setPosition(0.8);
+                turn(0.3, 20);
+                jewel.setPosition(0.28);
                 sleep(1000);
-                forward(-0.3, 60);
-                forward(0); sleep(500);
-                //Towards color sensor
+                turn(0.3, -20);
+                //Away from color sensor
             }
             //If none
             else if (ColorTest(color) == 0.5)
             {
                 //Skip selective action
             }
-            jewel.setPosition(0.8);
+            jewel.setPosition(0.28);
             sleep(1000);
         }
     }

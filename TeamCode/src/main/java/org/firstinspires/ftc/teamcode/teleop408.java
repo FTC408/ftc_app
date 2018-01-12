@@ -15,6 +15,9 @@ import com.qualcomm.robotcore.util.Range;
  * Created by Robotics on 10/26/2017.
  */
 @TeleOp(name="TeleOp", group="Linear Opmode")
+
+
+
 public class teleop408 extends robot {
 
 
@@ -23,14 +26,38 @@ public class teleop408 extends robot {
     public void runOpMode() throws InterruptedException
     {
         init(0);
-        Boolean upDownClaw = true;//Will assist in the operations to raise the claw up or down
-        Boolean inOutClaw = false;//Will assist in the operations to open or close the claw
+
+        user1 u1 = new user1();
+        user2 u2 = new user2();
+
         waitForStart(); //Program is setup by everything above this, wait until play is pressed on the phone
 
-        while (opModeIsActive())
-        {
-            modifiedMecanum();//Runs the mecanum drive
 
+        u1.start();
+        u2.start();
+
+        
+    }
+
+    class user1 extends Thread
+    {
+        user1()
+        {
+            while(opModeIsActive())
+            {
+                modifiedMecanum();
+            }
+        }
+    }
+    class user2 extends Thread
+    {
+        Boolean upDownClaw = true;//Will assist in the operations to raise the claw up or down
+        Boolean inOutClaw = false;//Will assist in the operations to open or close the claw
+
+        user2() throws InterruptedException
+        {
+            while(opModeIsActive())
+            {
             elevatorControl();//Controls the elevator
 
             intakeControl();//Controls the intake
@@ -40,11 +67,11 @@ public class teleop408 extends robot {
             //The following controls the winch that moves the arm in or out
             if (gamepad2.dpad_up)
             {
-                arm.setPower(1);
+                arm.setPower(-1);
             }
             else if (gamepad2.dpad_down)
             {
-                arm.setPower(-1);
+                arm.setPower(1);
             }
             else
             {
@@ -66,12 +93,10 @@ public class teleop408 extends robot {
             }
 
             //If tapped will move the claw up or down, the opposite of whatever it currently is
-            if (gamepad2.x)
-            {
+            if (gamepad2.x) {
                 upDownClaw = !upDownClaw;
 
-                if (upDownClaw == true)
-                {
+                if (upDownClaw == true) {
                     clawPivot.setPosition(0);
                     sleep(200);
                     clawPivot.setPosition(0.1);
@@ -83,9 +108,7 @@ public class teleop408 extends robot {
                     clawPivot.setPosition(0.4);
                     sleep(200);
                     clawPivot.setPosition(0.5);
-                }
-                else
-                {
+                } else {
                     clawPivot.setPosition(0.6); //Moves it down farther than it was, originally by accident but it works really well so I'll leave it
                     sleep(200);
                     clawPivot.setPosition(0.5);
@@ -101,11 +124,8 @@ public class teleop408 extends robot {
                     clawPivot.setPosition(0);
                 }
 
-
             }
-
-
-
+            }
         }
     }
 
