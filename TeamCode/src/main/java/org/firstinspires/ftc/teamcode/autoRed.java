@@ -18,6 +18,7 @@ public class autoRed extends robot
         init(0);
         waitForStart();
 
+        //EVERYTHING BELOW IS GUESSTIMATION OF MEASUREMENTS AND POWERS, THEY WILL NEED TO CHANGE BUT THE GENERAL STRUCTURE OF THE PROGRAM WILL NOT, TEST THE CRAP OUT OF THIS TOMORROW
         jewel(true); //Knocks the jewel off the platform
 
         strafe(-0.3, 30); //Hopefully strafes into position for the cipher read
