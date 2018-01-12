@@ -20,41 +20,40 @@ import com.qualcomm.robotcore.util.Range;
 
 public class teleop408 extends robot {
 
-
+    Boolean upDownClaw = true;//Will assist in the operations to raise the claw up or down
+    Boolean inOutClaw = false;//Will assist in the operations to open or close the claw
 
     @Override
     public void runOpMode() throws InterruptedException
     {
         init(0);
 
-        user1 u1 = new user1();
-        user2 u2 = new user2();
+        User1 user1 = new User1();
+        User2 user2 = new User2();
 
         waitForStart(); //Program is setup by everything above this, wait until play is pressed on the phone
 
 
-        u1.start();
-        u2.start();
+        user1.start();//Runs the thread that loops the user 1 interface
+        user2.start();//Runs the thread that loops the user 2 interface
 
 
     }
 
-    class user1 extends Thread
+    class User1 extends Thread //User 1 controls the drive train of the robot
     {
-        user1()
+        User1()
         {
             while(opModeIsActive())
             {
-                modifiedMecanum();
+                modifiedMecanum(); //Controls the drive train
             }
         }
     }
-    class user2 extends Thread
+    class User2 extends Thread //User 2 controls the various subsystems of the robot, such as the glyph manipulation system and the relic control system
     {
-        Boolean upDownClaw = true;//Will assist in the operations to raise the claw up or down
-        Boolean inOutClaw = false;//Will assist in the operations to open or close the claw
 
-        user2() throws InterruptedException
+        User2() throws InterruptedException
         {
             while(opModeIsActive())
             {
@@ -62,70 +61,79 @@ public class teleop408 extends robot {
 
             intakeControl();//Controls the intake
 
+            winchControl();//Controls the winch
 
+            clawControl();//Controls the claw
 
-            //The following controls the winch that moves the arm in or out
-            if (gamepad2.dpad_up)
-            {
-                arm.setPower(-1);
             }
-            else if (gamepad2.dpad_down)
+        }
+    }
+
+    public void winchControl()
+    {
+        //The following controls the winch that moves the arm in or out
+        if (gamepad2.dpad_up)
+        {
+            arm.setPower(-1);
+        }
+        else if (gamepad2.dpad_down)
+        {
+            arm.setPower(1);
+        }
+        else
+        {
+            arm.setPower(0);
+        }
+    }
+
+    public void clawControl()
+    {
+        //If tapped will move claw in or out, the opposite of whatever it currently is
+        if (gamepad2.a) {
+            inOutClaw = !inOutClaw;
+            sleep(200);
+            if (inOutClaw == true)
             {
-                arm.setPower(1);
+                claw.setPosition(0);
             }
             else
             {
-                arm.setPower(0);
+                claw.setPosition(1);
             }
+        }
 
-            //If tapped will move claw in or out, the opposite of whatever it currently is
-            if (gamepad2.a) {
-                inOutClaw = !inOutClaw;
+        //If tapped will move the claw up or down, the opposite of whatever it currently is
+        if (gamepad2.x) {
+            upDownClaw = !upDownClaw;
+
+            if (upDownClaw == true) {
+                clawPivot.setPosition(0);
                 sleep(200);
-                if (inOutClaw == true)
-                {
-                    claw.setPosition(0);
-                }
-                else
-                {
-                    claw.setPosition(1);
-                }
+                clawPivot.setPosition(0.1);
+                sleep(200);
+                clawPivot.setPosition(0.2);
+                sleep(200);
+                clawPivot.setPosition(0.3);
+                sleep(200);
+                clawPivot.setPosition(0.4);
+                sleep(200);
+                clawPivot.setPosition(0.5);
+            } else {
+                clawPivot.setPosition(0.6); //Moves it down farther than it was, originally by accident but it works really well so I'll leave it
+                sleep(200);
+                clawPivot.setPosition(0.5);
+                sleep(200);
+                clawPivot.setPosition(0.4);
+                sleep(200);
+                clawPivot.setPosition(0.3);
+                sleep(200);
+                clawPivot.setPosition(0.2);
+                sleep(200);
+                clawPivot.setPosition(0.1);
+                sleep(200);
+                clawPivot.setPosition(0);
             }
 
-            //If tapped will move the claw up or down, the opposite of whatever it currently is
-            if (gamepad2.x) {
-                upDownClaw = !upDownClaw;
-
-                if (upDownClaw == true) {
-                    clawPivot.setPosition(0);
-                    sleep(200);
-                    clawPivot.setPosition(0.1);
-                    sleep(200);
-                    clawPivot.setPosition(0.2);
-                    sleep(200);
-                    clawPivot.setPosition(0.3);
-                    sleep(200);
-                    clawPivot.setPosition(0.4);
-                    sleep(200);
-                    clawPivot.setPosition(0.5);
-                } else {
-                    clawPivot.setPosition(0.6); //Moves it down farther than it was, originally by accident but it works really well so I'll leave it
-                    sleep(200);
-                    clawPivot.setPosition(0.5);
-                    sleep(200);
-                    clawPivot.setPosition(0.4);
-                    sleep(200);
-                    clawPivot.setPosition(0.3);
-                    sleep(200);
-                    clawPivot.setPosition(0.2);
-                    sleep(200);
-                    clawPivot.setPosition(0.1);
-                    sleep(200);
-                    clawPivot.setPosition(0);
-                }
-
-            }
-            }
         }
     }
 
@@ -251,7 +259,7 @@ public class teleop408 extends robot {
 
         if (gamepad1.left_stick_x < 0) //Records whether or not x is positive or negative. This helps the program decide
             left = false;  //Which quadrant the stick is in because the inverse tangent is only valid in the first and fourth
-        else //quadrants. This boolean essentially lets us reflect over the y axis and compensate for how x screws things up
+        else //quadrants. This boolean essentially lets us reflect over the y axis and compensate for how x messes things up
             left = true;
 
 
