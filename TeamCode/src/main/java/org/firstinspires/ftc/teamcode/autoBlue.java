@@ -28,15 +28,21 @@ public class autoBlue extends robot
 
         waitForStart();
 
-        int position = position();
+        jewel(false); //Knocks the jewel off the platform
 
-        jewel(false);
+        strafe(0.3, 30); //Hopefully strafes into position for the cipher read
 
-        forward(1, 700); //Guesstimation
+        int position = position(); //Reads the cipher
 
-        strafe(-1, 700); //Guesstimation, should go left
+        forward(1, 150); //Drive forward, out of the way of the cryptobox
 
-        strafe(1, cipher[position]);
+        turn(1, 180); //Turn around 180 degrees to line up with the box
+
+        strafe(-1, 30);  //Approach the spot where point 0 on the cryptobox is
+
+        strafe(-1, cipher[position]);//Strafe into the correct ciphered position with the glyph, if the cipher was not read, go to position 0
+
+        placeBlock();
 
 
 
