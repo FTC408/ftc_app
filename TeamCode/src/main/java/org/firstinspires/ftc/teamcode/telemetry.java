@@ -13,6 +13,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class telemetry extends robot {
 
     public void runOpMode(){
-        telemetry();
+        init();
+
+        waitForStart();
+
+        while(opModeIsActive())
+        {
+            telemetry();
+        }
     }
 }

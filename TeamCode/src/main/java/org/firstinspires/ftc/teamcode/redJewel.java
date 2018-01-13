@@ -14,7 +14,14 @@ public class redJewel extends robot
         init(0);
         waitForStart();
 
+        int pos = position();
+
         jewel(true);
+
+        sleep(5000);
+        telemetry.addData("Position: ", "= " + pos);
+        telemetry.update();
+
     }
 }
 

@@ -33,9 +33,14 @@ public class teleop408 extends robot {
 
         waitForStart(); //Program is setup by everything above this, wait until play is pressed on the phone
 
-
-        user1.start();//Runs the thread that loops the user 1 interface
-        user2.start();//Runs the thread that loops the user 2 interface
+        while(opModeIsActive())
+        {
+            modifiedMecanum();
+            elevatorControl();
+            winchControl();
+            clawControl();
+            intakeControl();
+        }
 
 
     }
@@ -44,10 +49,9 @@ public class teleop408 extends robot {
     {
         User1()
         {
-            while(opModeIsActive())
-            {
+
                 modifiedMecanum(); //Controls the drive train
-            }
+
         }
     }
     class User2 extends Thread //User 2 controls the various subsystems of the robot, such as the glyph manipulation system and the relic control system
@@ -55,8 +59,7 @@ public class teleop408 extends robot {
 
         User2() throws InterruptedException
         {
-            while(opModeIsActive())
-            {
+
             elevatorControl();//Controls the elevator
 
             intakeControl();//Controls the intake
@@ -65,7 +68,7 @@ public class teleop408 extends robot {
 
             clawControl();//Controls the claw
 
-            }
+
         }
     }
 
@@ -144,7 +147,7 @@ public class teleop408 extends robot {
         elevator2.setPower(0);
         if(Math.abs(gamepad2.left_stick_y) >= 0.2) //If up on left stick, elevator goes up, if down goes down
         {
-            elevator.setPower(gamepad2.left_stick_y);
+            elevator.setPower(-gamepad2.left_stick_y);
             elevator2.setPower(gamepad2.left_stick_y);
         }
     }
@@ -153,20 +156,20 @@ public class teleop408 extends robot {
     {
         if (gamepad2.right_bumper) //If right bumper, intake right
         {
-            intakeRight.setPower(1);
+            intakeRight.setPower(-1);
         }
         if (gamepad2.left_bumper) //If left bumper, intake left
         {
-            intakeLeft.setPower(-1);
+            intakeLeft.setPower(1);
         }
 
         if (gamepad2.right_trigger >= 0.2) //If right trigger is pressed, intake puushes out on right
         {
-            intakeRight.setPower(-1);
+            intakeRight.setPower(1);
         }
         if (gamepad2.left_trigger >= 0.2) //If left trigger is pressed, intake pushes out on left
         {
-            intakeLeft.setPower(1);
+            intakeLeft.setPower(-1);
         }
         if ((gamepad2.right_trigger < 0.2 && gamepad2.left_trigger < 0.2) && !gamepad2.right_bumper && !gamepad2.left_bumper) //If both are small enough, do nothing
         {

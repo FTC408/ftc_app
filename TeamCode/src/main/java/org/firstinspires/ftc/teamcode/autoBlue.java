@@ -18,7 +18,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * Created by Austin on 10/25/2017.
  */
 @Autonomous(name= "Auto Blue", group = "Auto")
-@Disabled
 public class autoBlue extends robot
 {
 
@@ -29,11 +28,8 @@ public class autoBlue extends robot
         waitForStart();
 
         //EVERYTHING BELOW IS GUESSTIMATION OF MEASUREMENTS AND POWERS, THEY WILL NEED TO CHANGE BUT THE GENERAL STRUCTURE OF THE PROGRAM WILL NOT, TEST THE CRAP OUT OF THIS TOMORROW
-        jewel(false); //Knocks the jewel off the platform
-
-        strafe(0.3, 30); //Hopefully strafes into position for the cipher read
-
         int position = position(); //Reads the cipher
+        jewel(false); //Knocks the jewel off the platform
 
         forward(1, 150); //Drive forward, out of the way of the cryptobox
 

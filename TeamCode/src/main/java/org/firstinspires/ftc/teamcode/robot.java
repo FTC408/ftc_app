@@ -28,6 +28,8 @@ public class robot extends LinearOpMode
     CRServo intakeRight, intakeLeft;
     Servo jewel, clawPivot, claw;
 
+    double downPosition = 0, upPosition = 0.42;
+
     //These are the values in mm of the close middle and far positions for placing the block from the starting point
     //0 = close, 1 = middle, 2 = far, 3 = nothing
     int[] cipher = {0, 178, 356, 0};
@@ -82,7 +84,7 @@ public class robot extends LinearOpMode
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //Sets the jewel arm position to the best spot
-        jewel.setPosition(0.28);
+        jewel.setPosition(upPosition);
     }
 
     public VuforiaTrackable relicTemplate()
@@ -144,24 +146,24 @@ public class robot extends LinearOpMode
     {
         if (red == true) //Wanted Red
         {
-            jewel.setPosition(0.75);
+            jewel.setPosition(downPosition);
             sleep(1000);
             //If Red
             if (ColorTest(color) == 1)
             {
-                turn(0.3, 20);
-                jewel.setPosition(0.28);
+                turn(0.3, -5);
+                jewel.setPosition(upPosition);
                 sleep(1000);
-                turn(0.3, -20);
+                turn(0.3, 5);
                 //Away from color sensor
             }
             //If blue
             else if (ColorTest(color) == 0)
             {
-                turn(0.3, -20);
-                jewel.setPosition(0.28);
+                turn(0.3, 5);
+                jewel.setPosition(upPosition);
                 sleep(1000);
-                turn(0.3, 20);
+                turn(0.3, -5);
                 //Towards color sensor
             }
             //If none
@@ -169,29 +171,29 @@ public class robot extends LinearOpMode
             {
                 //Skip selective action
             }
-            jewel.setPosition(0.28);
+            jewel.setPosition(upPosition);
             sleep(1000);
         }
         else //Wanted Blue
         {
-            jewel.setPosition(0.75);
+            jewel.setPosition(downPosition);
             sleep(1000);
             //If Red
             if (ColorTest(color) == 1)
             {
-                turn(0.3, -20);
-                jewel.setPosition(0.28);
+                turn(0.3, 5);
+                jewel.setPosition(upPosition);
                 sleep(1000);
-                turn(0.3, 20);
+                turn(0.3, -5);
                 //Towards color sensor
             }
             //If blue
             else if (ColorTest(color) == 0)
             {
-                turn(0.3, 20);
-                jewel.setPosition(0.28);
+                turn(0.3, -5);
+                jewel.setPosition(upPosition);
                 sleep(1000);
-                turn(0.3, -20);
+                turn(0.3, 5);
                 //Away from color sensor
             }
             //If none
@@ -199,7 +201,7 @@ public class robot extends LinearOpMode
             {
                 //Skip selective action
             }
-            jewel.setPosition(0.28);
+            jewel.setPosition(upPosition);
             sleep(1000);
         }
     }
@@ -323,14 +325,14 @@ public class robot extends LinearOpMode
 
     public double tickstomm(int ticks){
 
-        double mm = (ticks * 2.955);
+        double mm = (ticks * (1.474* 2));
         return mm;
     }
 
     //Go forward for such and such distance
     public double mmtoticks(double mm)
     {
-        double ticks = (mm / 2.955);
+        double ticks = (mm / (1.474 * 2));
         return ticks;
     }
 
@@ -345,7 +347,7 @@ public class robot extends LinearOpMode
         telemetry.addData("Right Front Motor Position: ", rightDriveF.getCurrentPosition());
         telemetry.addData("Left Back Motor Position: ", leftDriveB.getCurrentPosition());
         telemetry.addData("Left Front Motor Position: ", leftDriveF.getCurrentPosition());
-        telemetry.addData("Elevator Position: ", elevator.getCurrentPosition());
+        //telemetry.addData("Elevator Position: ", elevator.getCurrentPosition());
         telemetry.addData("", "");
 
         //get power
