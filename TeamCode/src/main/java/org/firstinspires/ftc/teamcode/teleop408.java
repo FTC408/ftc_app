@@ -23,6 +23,8 @@ public class teleop408 extends robot {
     Boolean upDownClaw = true;//Will assist in the operations to raise the claw up or down
     Boolean inOutClaw = false;//Will assist in the operations to open or close the claw
 
+    double clawPos = 0;
+
     @Override
     public void runOpMode() throws InterruptedException
     {
@@ -40,6 +42,7 @@ public class teleop408 extends robot {
             winchControl();
             clawControl();
             intakeControl();
+            //jewel.setPosition(upPosition);
         }
 
 
@@ -75,13 +78,9 @@ public class teleop408 extends robot {
     public void winchControl()
     {
         //The following controls the winch that moves the arm in or out
-        if (gamepad2.dpad_up)
+        if(Math.abs(gamepad2.right_stick_y) > 0.2 )
         {
-            arm.setPower(-1);
-        }
-        else if (gamepad2.dpad_down)
-        {
-            arm.setPower(1);
+            arm.setPower(gamepad2.right_stick_y);
         }
         else
         {
@@ -105,39 +104,28 @@ public class teleop408 extends robot {
             }
         }
 
-        //If tapped will move the claw up or down, the opposite of whatever it currently is
-        if (gamepad2.x) {
-            upDownClaw = !upDownClaw;
-
-            if (upDownClaw == true) {
-                clawPivot.setPosition(0);
-                sleep(200);
-                clawPivot.setPosition(0.1);
-                sleep(200);
-                clawPivot.setPosition(0.2);
-                sleep(200);
-                clawPivot.setPosition(0.3);
-                sleep(200);
-                clawPivot.setPosition(0.4);
-                sleep(200);
-                clawPivot.setPosition(0.5);
-            } else {
-                clawPivot.setPosition(0.6); //Moves it down farther than it was, originally by accident but it works really well so I'll leave it
-                sleep(200);
-                clawPivot.setPosition(0.5);
-                sleep(200);
-                clawPivot.setPosition(0.4);
-                sleep(200);
-                clawPivot.setPosition(0.3);
-                sleep(200);
-                clawPivot.setPosition(0.2);
-                sleep(200);
-                clawPivot.setPosition(0.1);
-                sleep(200);
-                clawPivot.setPosition(0);
+        if (gamepad2.dpad_up)//0
+        {
+            clawPos = clawPos - 0.05;
+            if (clawPos < 0)
+            {
+                clawPos = 0;
             }
-
+            clawPivot.setPosition(clawPos);
+            sleep(100);
         }
+        if (gamepad2.dpad_down)//1
+        {
+            clawPos = clawPos + 0.05;
+            if (clawPos > 1)
+            {
+                clawPos = 1;
+            }
+            clawPivot.setPosition(clawPos);
+            sleep(100);
+        }
+
+
     }
 
     public void elevatorControl()
@@ -147,8 +135,8 @@ public class teleop408 extends robot {
         elevator2.setPower(0);
         if(Math.abs(gamepad2.left_stick_y) >= 0.2) //If up on left stick, elevator goes up, if down goes down
         {
-            elevator.setPower(-gamepad2.left_stick_y);
-            elevator2.setPower(gamepad2.left_stick_y);
+            elevator.setPower(gamepad2.left_stick_y);
+            elevator2.setPower(-gamepad2.left_stick_y);
         }
     }
 

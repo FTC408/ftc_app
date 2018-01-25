@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * Created by Austin on 10/25/2017.
  */
 @Autonomous(name= "Auto Red", group = "Auto")
+@Disabled
 public class autoRed extends robot
 {
     public void runOpMode() throws InterruptedException
@@ -19,9 +21,9 @@ public class autoRed extends robot
         waitForStart();
 
         //EVERYTHING BELOW IS GUESSTIMATION OF MEASUREMENTS AND POWERS, THEY WILL NEED TO CHANGE BUT THE GENERAL STRUCTURE OF THE PROGRAM WILL NOT, TEST THE CRAP OUT OF THIS TOMORROW
-        jewel(true); //Knocks the jewel off the platform
+        //jewel(true); //Knocks the jewel off the platform
 
-        strafe(-0.3, 30); //Hopefully strafes into position for the cipher read
+        forward(0.5, 50); //Hopefully strafes into position for the cipher read
 
         int position = position(); //Reads the cipher
 

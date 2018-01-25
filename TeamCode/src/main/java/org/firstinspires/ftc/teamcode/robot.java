@@ -26,9 +26,10 @@ public class robot extends LinearOpMode
     ColorSensor color;
     DistanceSensor sensorDistance;
     CRServo intakeRight, intakeLeft;
-    Servo jewel, clawPivot, claw;
+    Servo jewel, clawPivot, claw, jewelSwivel;
 
     double downPosition = 0, upPosition = 0.42;
+    double straightPosition = 0.5, rightPosition = 0.75, leftPosition = 0.25;
 
     //These are the values in mm of the close middle and far positions for placing the block from the starting point
     //0 = close, 1 = middle, 2 = far, 3 = nothing
@@ -62,9 +63,14 @@ public class robot extends LinearOpMode
         claw = hardwareMap.servo.get("claw");
 
         jewel = hardwareMap.servo.get("jewel");
+        jewelSwivel = hardwareMap.servo.get("jewel_swivel");
 
-        rightDriveB.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightDriveF.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightDriveB.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightDriveF.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        leftDriveB.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftDriveF.setDirection(DcMotorSimple.Direction.REVERSE);
+
         leftDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -151,19 +157,21 @@ public class robot extends LinearOpMode
             //If Red
             if (ColorTest(color) == 1)
             {
-                turn(0.3, -5);
+                turn(0.2, 5);
+                sleep(1000);
                 jewel.setPosition(upPosition);
                 sleep(1000);
-                turn(0.3, 5);
-                //Away from color sensor
+                turn(0.2, -5);
+                //Towards color sensor
             }
             //If blue
             else if (ColorTest(color) == 0)
             {
-                turn(0.3, 5);
+                turn(0.2, -5);
+                sleep(1000);
                 jewel.setPosition(upPosition);
                 sleep(1000);
-                turn(0.3, -5);
+                turn(0.2, 5);
                 //Towards color sensor
             }
             //If none
@@ -181,19 +189,21 @@ public class robot extends LinearOpMode
             //If Red
             if (ColorTest(color) == 1)
             {
-                turn(0.3, 5);
+                turn(0.2, -5);
+                sleep(1000);
                 jewel.setPosition(upPosition);
                 sleep(1000);
-                turn(0.3, -5);
+                turn(0.2, 5);
                 //Towards color sensor
             }
             //If blue
             else if (ColorTest(color) == 0)
             {
-                turn(0.3, -5);
+                turn(0.2, 5);
+                sleep(1000);
                 jewel.setPosition(upPosition);
                 sleep(1000);
-                turn(0.3, 5);
+                turn(0.2, -5);
                 //Away from color sensor
             }
             //If none
@@ -233,8 +243,8 @@ public class robot extends LinearOpMode
 
     public void forward(double power)
     {
-        leftPower(power);
-        rightPower(power);
+        leftPower(-power);
+        rightPower(-power);
     }
 
     public void forward(double power, int mm)
@@ -243,13 +253,13 @@ public class robot extends LinearOpMode
         //Forward 1 meter to test encoders once we get the chance to use them
 
         if (power >= 0) {
-            while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(Math.abs(mm)))) {
+            while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(Math.abs(mm)))) {
                 forward(power);
             }
         }
         else
         {
-            while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(Math.abs(mm)))) {
+            while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(Math.abs(mm)))) {
                 forward(power);
             }
         }
@@ -264,13 +274,13 @@ public class robot extends LinearOpMode
         double distance = (Math.abs(degrees) * Circumfrence) /180;
 
         if (degrees >= 0) {
-            while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(distance))) {
+            while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(distance)* (2/3))) {
                 right(Math.abs(power));
             }
         }
         else
         {
-            while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(distance))) {
+            while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(distance)* (2/3))) {
                 left(Math.abs(power));
             }
         }
@@ -284,13 +294,13 @@ public class robot extends LinearOpMode
 
         //Strafe Right
         if (power >= 0) {
-            while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(Math.abs(mm)))) {
+            while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(Math.abs(mm)))) {
                 strafeRight(Math.abs(power));
             }
         }
         //Strafe left
         else {
-            while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(Math.abs(mm)))) {
+            while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(Math.abs(mm)))) {
                 strafeLeft(Math.abs(power));
             }
         }
@@ -300,16 +310,16 @@ public class robot extends LinearOpMode
     {
         leftDriveF.setPower(-power);
         leftDriveB.setPower(power);
-        rightDriveF.setPower(-power);
-        rightDriveB.setPower(power);
+        rightDriveF.setPower(power);
+        rightDriveB.setPower(-power);
     }
 
     public void strafeLeft(double power)
     {
         leftDriveF.setPower(power);
         leftDriveB.setPower(-power);
-        rightDriveF.setPower(power);
-        rightDriveB.setPower(-power);
+        rightDriveF.setPower(-power);
+        rightDriveB.setPower(power);
     }
 
     public void right(double power)
@@ -325,14 +335,14 @@ public class robot extends LinearOpMode
 
     public double tickstomm(int ticks){
 
-        double mm = (ticks * (1.474* 2));
+        double mm = (ticks * (2));
         return mm;
     }
-
+                                             //wheel gear ratio 1:2
     //Go forward for such and such distance
     public double mmtoticks(double mm)
     {
-        double ticks = (mm / (1.474 * 2));
+        double ticks = (mm / (2));
         return ticks;
     }
 
@@ -370,6 +380,5 @@ public class robot extends LinearOpMode
         {
             telemetry.addData("Color Left: ", "Neither");
         }
-        telemetry.update();
     }
 }

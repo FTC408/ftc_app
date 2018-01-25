@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  */
 
 @TeleOp(name = "Telemetry", group = "Test")
-@Disabled
+
 public class telemetry extends robot {
 
     public void runOpMode(){
@@ -19,7 +19,19 @@ public class telemetry extends robot {
 
         while(opModeIsActive())
         {
-            telemetry();
+            if (color.red() > color.blue())
+            {
+                telemetry.addData("Color Left: ", "Red");
+            }
+            else if (color.red() < color.blue())
+            {
+                telemetry.addData("Color Left: ", "Blue");
+            }
+            else
+            {
+                telemetry.addData("Color Left: ", "Neither");
+            }
+            telemetry.update();
         }
     }
 }

@@ -18,9 +18,7 @@ public class blueJewel extends robot
 
         jewel(false);
 
-        sleep(5000);
-        telemetry.addData("Position: ", "= " + pos);
-        telemetry.update();
+
     }
 }
 
