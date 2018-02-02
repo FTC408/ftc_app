@@ -18,9 +18,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * Created by Austin on 10/25/2017.
  */
 @Autonomous(name= "Auto Blue", group = "Auto")
-@Disabled
+//@Disabled
 public class autoBlue extends robot
 {
+
+
 
     public void runOpMode() throws InterruptedException
     {
@@ -30,17 +32,38 @@ public class autoBlue extends robot
 
         //EVERYTHING BELOW IS GUESSTIMATION OF MEASUREMENTS AND POWERS, THEY WILL NEED TO CHANGE BUT THE GENERAL STRUCTURE OF THE PROGRAM WILL NOT, TEST THE CRAP OUT OF THIS TOMORROW
         int position = position(); //Reads the cipher
-        //jewel(false); //Knocks the jewel off the platform
+        jewel(false); //Knocks the jewel off the platform
 
-        forward(1, 150); //Drive forward, out of the way of the cryptobox
+        forward(-0.3, (int)(25.5*29));
 
-        turn(1, 180); //Turn around 180 degrees to line up with the box
+        forward(0);
+        sleep(1000);
 
-        strafe(-1, 30);  //Approach the spot where point 0 on the cryptobox is
+        turn(0.3, 180);
 
-        strafe(-1, cipher[position]);//Strafe into the correct ciphered position with the glyph, if the cipher was not read, go to position 0
+        forward(0);
+        sleep(1000);
+
+        strafe(0.3, cipherBLUE[position] +  ((int)(2*25.4)));//Strafe into the correct ciphered position with the glyph, if the cipher was not read, go to position 0
+
+        forward(0);
+        sleep(1000);
 
         placeBlock();
+
+        intakeLeft.setPower(1);
+        intakeRight.setPower(-1);
+
+        forward(0.6);
+        sleep(1000);
+        forward(0);
+        sleep(1000);
+        forward(-0.4);
+        sleep(1000);
+        forward(0);
+        sleep(1000);
+        intakeLeft.setPower(0);
+        intakeRight.setPower(0);
 
 
 

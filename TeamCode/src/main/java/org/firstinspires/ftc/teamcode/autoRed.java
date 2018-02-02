@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * Created by Austin on 10/25/2017.
  */
 @Autonomous(name= "Auto Red", group = "Auto")
-@Disabled
+//@Disabled
 public class autoRed extends robot
 {
     public void runOpMode() throws InterruptedException
@@ -20,22 +20,44 @@ public class autoRed extends robot
         init(0);
         waitForStart();
 
-        //EVERYTHING BELOW IS GUESSTIMATION OF MEASUREMENTS AND POWERS, THEY WILL NEED TO CHANGE BUT THE GENERAL STRUCTURE OF THE PROGRAM WILL NOT, TEST THE CRAP OUT OF THIS TOMORROW
-        //jewel(true); //Knocks the jewel off the platform
-
-        forward(0.5, 50); //Hopefully strafes into position for the cipher read
+        jewel(true); //Knocks the jewel off the platform
 
         int position = position(); //Reads the cipher
 
-        forward(1, 150); //Drive forward, out of the way of the cryptobox
+        forward(0.3, (int) 25.4* 29);//Towards Cryptobox
 
-        turn(1, -180); //Turn around 180 degrees to line up with the box
+        forward(0);
+        sleep(1000);
 
-        strafe(1, 30);  //Approach the spot where point 0 on the cryptobox is
+        strafe(-0.3, cipherRED[position] +  ((int)(2*25.4)));//Strafe into the correct ciphered position with the glyph, if the cipher was not read, go to position 0
 
-        strafe(1, cipher[position]);//Strafe into the correct ciphered position with the glyph, if the cipher was not read, go to position 0
+        forward(0);
+        sleep(1000);
+
+        //turn(0.5, 20);
+
+        /*if(position == 0)
+        {
+            forward(0.4);
+            sleep(500);
+            forward(0);
+        }*/
 
         placeBlock();
+        intakeLeft.setPower(1);
+        intakeRight.setPower(-1);
+
+        forward(0.6);
+        sleep(1000);
+        forward(0);
+        sleep(1000);
+        forward(-0.4);
+        sleep(1000);
+        forward(0);
+        sleep(1000);
+        intakeLeft.setPower(0);
+        intakeRight.setPower(0);
+
 
 
 

@@ -30,9 +30,6 @@ public class teleop408 extends robot {
     {
         init(0);
 
-        User1 user1 = new User1();
-        User2 user2 = new User2();
-
         waitForStart(); //Program is setup by everything above this, wait until play is pressed on the phone
 
         while(opModeIsActive())
@@ -42,37 +39,12 @@ public class teleop408 extends robot {
             winchControl();
             clawControl();
             intakeControl();
-            //jewel.setPosition(upPosition);
+            jewel.setPosition(upPosition);
+            jewelSwivel.setPosition(straightPosition);
+            telemetry();
         }
 
 
-    }
-
-    class User1 extends Thread //User 1 controls the drive train of the robot
-    {
-        User1()
-        {
-
-                modifiedMecanum(); //Controls the drive train
-
-        }
-    }
-    class User2 extends Thread //User 2 controls the various subsystems of the robot, such as the glyph manipulation system and the relic control system
-    {
-
-        User2() throws InterruptedException
-        {
-
-            elevatorControl();//Controls the elevator
-
-            intakeControl();//Controls the intake
-
-            winchControl();//Controls the winch
-
-            clawControl();//Controls the claw
-
-
-        }
     }
 
     public void winchControl()

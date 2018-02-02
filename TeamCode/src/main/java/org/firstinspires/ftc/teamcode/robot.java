@@ -28,12 +28,13 @@ public class robot extends LinearOpMode
     CRServo intakeRight, intakeLeft;
     Servo jewel, clawPivot, claw, jewelSwivel;
 
-    double downPosition = 0, upPosition = 0.42;
-    double straightPosition = 0.5, rightPosition = 0.75, leftPosition = 0.25;
+    double downPosition = 0.95, upPosition = 0.46;
+    double straightPosition = 0.15, rightPosition = 0, leftPosition = 0.5;
 
     //These are the values in mm of the close middle and far positions for placing the block from the starting point
     //0 = close, 1 = middle, 2 = far, 3 = nothing
-    int[] cipher = {0, 178, 356, 0};
+    int[] cipherBLUE = {0, 200, 385, 0};
+    int[] cipherRED = {490, 200, 0, 0};
 
     public static final String TAG = "Vuforia VuMark Sample";
     OpenGLMatrix lastLocation = null;
@@ -65,16 +66,17 @@ public class robot extends LinearOpMode
         jewel = hardwareMap.servo.get("jewel");
         jewelSwivel = hardwareMap.servo.get("jewel_swivel");
 
-        rightDriveB.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightDriveB.setDirection(DcMotorSimple.Direction.FORWARD);//ON LEFT SIDE FOR WHATEVER REASON
         rightDriveF.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        leftDriveB.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftDriveF.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftDriveB.setDirection(DcMotorSimple.Direction.REVERSE);//ON RIGHT SIDE FOR WHATEVER REASON
+        leftDriveF.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDriveF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDriveB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         // get a reference to the color sensor
         color = hardwareMap.get(ColorSensor.class, "colorLeft");
@@ -90,12 +92,15 @@ public class robot extends LinearOpMode
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //Sets the jewel arm position to the best spot
+        jewelSwivel.setPosition(straightPosition);
         jewel.setPosition(upPosition);
+
     }
 
     public VuforiaTrackable relicTemplate()
     {
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();//Configures Vuforia parameters
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = "AcmoujL/////AAAAGfYN1VWHOESQp02jdVbkpgRIroIXb6bGJbVg+YmQNOR1Utps1uBrE31QT5LTDRtXTqfGsXa1UDAVYDCODNbSDvvBqaeL+InYfonHHdT5uSQCUlOM5KznGi0nxg87OadM5azVuy9kk+uc0w3lmN/8PDzgxO14VRINXAf3w5AkMzhZAhKbzOH3PXYD15b9WsxeBfgDLHahE3Utn1i5u4EYZwizxBCa2Kg4HvtuhNLPBW7qjAfU+VEEsXHXCsJXU16uPaSQoPGWQsgZF729eI7aKmFa/zImSqxi1LizI6Xx8GkLOINg9j+gOixUkF115rrI5Lg4in21bKiR51FR9WmTunV8e/gGPBPrcfGFRP77fzsa";
 
@@ -107,34 +112,48 @@ public class robot extends LinearOpMode
         VuforiaTrackable relicTemplate = relicTrackables.get(0);// I think this continues to load the trackables
         relicTemplate.setName("relicVuMarkTemplate");// This gives it a name or something
 
+        relicTrackables.activate();
+
         return relicTemplate;
     }
 
     //0= left, 1= center, 2= right, 3= unknown
     public int position()//You need to start from the left side of the cryptobox for this to work
     {
-        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate());
-        sleep(2000);
+        VuforiaTrackable relicTemplate = relicTemplate();
 
-        if (vuMark == RelicRecoveryVuMark.CENTER)
-        {
-            telemetry.addData("VuMark", "Center");
-            return 1;
+        int i = 0;
+
+        while(opModeIsActive()) {
+
+            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+
+            if (vuMark == RelicRecoveryVuMark.CENTER) {
+                telemetry.addData("VuMark", "Center");
+                telemetry.update();
+                return 1;
+            } else if (vuMark == RelicRecoveryVuMark.RIGHT) {
+                telemetry.addData("VuMark", "Right");
+                telemetry.update();
+                return 2;
+            } else if (vuMark == RelicRecoveryVuMark.LEFT) {
+                telemetry.addData("VuMark", "Left");
+                telemetry.update();
+                return 0;
+            }
+            else if (i == 10000)
+            {
+                break;
+            }else {
+                sleep(1);
+                i++;
+                telemetry.addData("VuMark", "not visible");
+                telemetry.update();
+            }
+
         }
-        else if (vuMark == RelicRecoveryVuMark.RIGHT)
-        {
-            telemetry.addData("VuMark", "Right");
-            return 2;
-        }
-        else if (vuMark == RelicRecoveryVuMark.LEFT)
-        {
-            telemetry.addData("VuMark", "Left");
-            return 0;
-        }
-        else{
-            telemetry.addData("VuMark", "not visible");
-            return 3;
-        }
+        return 3;
+
     }
 
     //Code for placing a block
@@ -157,22 +176,22 @@ public class robot extends LinearOpMode
             //If Red
             if (ColorTest(color) == 1)
             {
-                turn(0.2, 5);
+                jewelSwivel.setPosition(leftPosition);
+                sleep(1000);
+                jewelSwivel.setPosition(straightPosition);
                 sleep(1000);
                 jewel.setPosition(upPosition);
                 sleep(1000);
-                turn(0.2, -5);
-                //Towards color sensor
             }
             //If blue
             else if (ColorTest(color) == 0)
             {
-                turn(0.2, -5);
+                jewelSwivel.setPosition(rightPosition);
+                sleep(1000);
+                jewelSwivel.setPosition(straightPosition);
                 sleep(1000);
                 jewel.setPosition(upPosition);
                 sleep(1000);
-                turn(0.2, 5);
-                //Towards color sensor
             }
             //If none
             else if (ColorTest(color) == 0.5)
@@ -189,22 +208,22 @@ public class robot extends LinearOpMode
             //If Red
             if (ColorTest(color) == 1)
             {
-                turn(0.2, -5);
+                jewelSwivel.setPosition(rightPosition);
+                sleep(1000);
+                jewelSwivel.setPosition(straightPosition);
                 sleep(1000);
                 jewel.setPosition(upPosition);
                 sleep(1000);
-                turn(0.2, 5);
-                //Towards color sensor
             }
             //If blue
             else if (ColorTest(color) == 0)
             {
-                turn(0.2, 5);
+                jewelSwivel.setPosition(leftPosition);
+                sleep(1000);
+                jewelSwivel.setPosition(straightPosition);
                 sleep(1000);
                 jewel.setPosition(upPosition);
                 sleep(1000);
-                turn(0.2, -5);
-                //Away from color sensor
             }
             //If none
             else if (ColorTest(color) == 0.5)
@@ -263,6 +282,7 @@ public class robot extends LinearOpMode
                 forward(power);
             }
         }
+        forward(0);
     }
 
     //Positive Degrees to the right, negative to the left
@@ -272,18 +292,33 @@ public class robot extends LinearOpMode
         int pos = leftDriveF.getCurrentPosition();
         double Circumfrence = Math.PI * diameter;
         double distance = (Math.abs(degrees) * Circumfrence) /180;
+        telemetry.addData("First one:", "");
+        telemetry.addData("Motor Value:", leftDriveB.getCurrentPosition());
+        telemetry.update();
 
         if (degrees >= 0) {
-            while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(distance)* (2/3))) {
-                right(Math.abs(power));
+            telemetry.addData("Left one:", "");
+            telemetry.addData("Motor Value:", leftDriveB.getCurrentPosition());
+            telemetry.update();
+            while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(distance * 0.6))) {
+                left(Math.abs(power));
+                telemetry.addData("Left one cont:", "");
+                telemetry.addData("Motor Value:", leftDriveB.getCurrentPosition());
+                telemetry.update();
             }
         }
         else
-        {
-            while (leftDriveF.getCurrentPosition() > (pos - mmtoticks(distance)* (2/3))) {
-                left(Math.abs(power));
+        {telemetry.addData("Right one:", "");
+            telemetry.addData("Motor Value:", leftDriveB.getCurrentPosition());
+            telemetry.update();
+            while (leftDriveF.getCurrentPosition() < (pos + mmtoticks(distance * 0.6))) {
+                telemetry.addData("Right one cont:", "");
+                telemetry.addData("Motor Value:", leftDriveB.getCurrentPosition());
+                telemetry.update();
+                right(Math.abs(power));
             }
         }
+        forward(0);
     }
 
     //Positive power is to the right, negative to the left
@@ -304,22 +339,23 @@ public class robot extends LinearOpMode
                 strafeLeft(Math.abs(power));
             }
         }
+        forward(0);
     }
 
     public void strafeRight(double power)
     {
         leftDriveF.setPower(-power);
         leftDriveB.setPower(power);
-        rightDriveF.setPower(power);
-        rightDriveB.setPower(-power);
+        rightDriveF.setPower(-power);
+        rightDriveB.setPower(power);
     }
 
     public void strafeLeft(double power)
     {
         leftDriveF.setPower(power);
         leftDriveB.setPower(-power);
-        rightDriveF.setPower(-power);
-        rightDriveB.setPower(power);
+        rightDriveF.setPower(power);
+        rightDriveB.setPower(-power);
     }
 
     public void right(double power)
@@ -359,16 +395,17 @@ public class robot extends LinearOpMode
         telemetry.addData("Left Front Motor Position: ", leftDriveF.getCurrentPosition());
         //telemetry.addData("Elevator Position: ", elevator.getCurrentPosition());
         telemetry.addData("", "");
+        telemetry.update();
 
         //get power
-        telemetry.addData("Motor Powers", "");
+        /*telemetry.addData("Motor Powers", "");
         telemetry.addData("Right Back Motor Power: ", rightDriveB.getPower());
         telemetry.addData("Right Front Motor Power: ", rightDriveF.getPower());
         telemetry.addData("Left Back Motor Power: ", leftDriveB.getPower());
         telemetry.addData("Left Front Motor Power: ", leftDriveF.getPower());
-        telemetry.addData("", "");
+        telemetry.addData("", "");*/
 
-        if (color.red() > color.blue())
+        /*if (color.red() > color.blue())
         {
             telemetry.addData("Color Left: ", "Red");
         }
@@ -379,6 +416,6 @@ public class robot extends LinearOpMode
         if (color.red() == color.blue())
         {
             telemetry.addData("Color Left: ", "Neither");
-        }
+        }*/
     }
 }
