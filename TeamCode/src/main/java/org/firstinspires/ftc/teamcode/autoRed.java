@@ -20,7 +20,7 @@ public class autoRed extends robot
         init(0);
         waitForStart();
 
-        jewel(true); //Knocks the jewel off the platform
+        jewel(false); //Knocks the jewel off the platform
 
         int position = position(); //Reads the cipher
 

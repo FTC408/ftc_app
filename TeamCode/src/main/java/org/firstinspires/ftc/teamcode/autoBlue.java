@@ -32,35 +32,41 @@ public class autoBlue extends robot
 
         //EVERYTHING BELOW IS GUESSTIMATION OF MEASUREMENTS AND POWERS, THEY WILL NEED TO CHANGE BUT THE GENERAL STRUCTURE OF THE PROGRAM WILL NOT, TEST THE CRAP OUT OF THIS TOMORROW
         int position = position(); //Reads the cipher
-        jewel(false); //Knocks the jewel off the platform
+        jewel(true); //Knocks the jewel off the platform
 
-        forward(-0.3, (int)(25.5*29));
+        forward(-0.3, (int)(25.5*25.5));
+
+        sleep(500);
+
+        turn(0.3, 45);
+        jewel.setPosition(downPosition);
+        sleep(1500);
+        jewel.setPosition(upPosition);
+        sleep(500);
+
+        turn(0.3, 90);
 
         forward(0);
-        sleep(1000);
+        sleep(500);
 
-        turn(0.3, 180);
-
-        forward(0);
-        sleep(1000);
-
-        strafe(0.3, cipherBLUE[position] +  ((int)(2*25.4)));//Strafe into the correct ciphered position with the glyph, if the cipher was not read, go to position 0
+        strafe(0.5, cipherBLUE[position] +  ((int)(2*25.4)));//Strafe into the correct ciphered position with the glyph, if the cipher was not read, go to position 0
 
         forward(0);
-        sleep(1000);
+        sleep(500);
 
         placeBlock();
 
-        intakeLeft.setPower(1);
-        intakeRight.setPower(-1);
+        sleep(1000);
 
         forward(0.6);
         sleep(1000);
         forward(0);
         sleep(1000);
         forward(-0.4);
-        sleep(1000);
+        sleep(1500);
         forward(0);
+        intakeLeft.setPower(1);
+        intakeRight.setPower(-1);
         sleep(1000);
         intakeLeft.setPower(0);
         intakeRight.setPower(0);

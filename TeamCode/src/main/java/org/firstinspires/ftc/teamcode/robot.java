@@ -28,13 +28,13 @@ public class robot extends LinearOpMode
     CRServo intakeRight, intakeLeft;
     Servo jewel, clawPivot, claw, jewelSwivel;
 
-    double downPosition = 0.95, upPosition = 0.46;
-    double straightPosition = 0.15, rightPosition = 0, leftPosition = 0.5;
+    double downPosition = 1, upPosition = 0.5;
+    double straightPosition = 0.15, rightPosition = 0, leftPosition = 0.8;
 
     //These are the values in mm of the close middle and far positions for placing the block from the starting point
     //0 = close, 1 = middle, 2 = far, 3 = nothing
-    int[] cipherBLUE = {0, 200, 385, 0};
-    int[] cipherRED = {490, 200, 0, 0};
+    int[] cipherBLUE = {20, 190, 400, 0};
+    int[] cipherRED = {500, 200, 0, 0};
 
     public static final String TAG = "Vuforia VuMark Sample";
     OpenGLMatrix lastLocation = null;

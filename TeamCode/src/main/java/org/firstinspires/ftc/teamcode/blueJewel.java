@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  * Created by Austin on 10/25/2017.
  */
 @Autonomous(name= "Blue Jewel", group = "Auto")
-@Disabled
+//@Disabled
 public class blueJewel extends robot
 {
 

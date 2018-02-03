@@ -39,8 +39,19 @@ public class teleop408 extends robot {
             winchControl();
             clawControl();
             intakeControl();
-            jewel.setPosition(upPosition);
-            jewelSwivel.setPosition(straightPosition);
+
+            if(gamepad1.b)
+            {
+                jewel.setPosition(1);
+                jewelSwivel.setPosition(straightPosition);
+            }
+            else
+            {
+                jewel.setPosition(upPosition);
+                jewelSwivel.setPosition(straightPosition);
+            }
+
+
             telemetry();
         }
 
