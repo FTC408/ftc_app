@@ -91,10 +91,6 @@ public class robot extends LinearOpMode
         rightDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        //Sets the jewel arm position to the best spot
-        jewelSwivel.setPosition(straightPosition);
-        jewel.setPosition(upPosition);
-
     }
 
     public VuforiaTrackable relicTemplate()

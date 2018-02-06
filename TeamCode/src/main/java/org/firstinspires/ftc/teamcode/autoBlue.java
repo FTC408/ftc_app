@@ -28,6 +28,9 @@ public class autoBlue extends robot
     {
         init(0);
 
+        //Sets the jewel arm position to the best spot
+        jewelSwivel.setPosition(straightPosition);
+        jewel.setPosition(upPosition);
         waitForStart();
 
         //EVERYTHING BELOW IS GUESSTIMATION OF MEASUREMENTS AND POWERS, THEY WILL NEED TO CHANGE BUT THE GENERAL STRUCTURE OF THE PROGRAM WILL NOT, TEST THE CRAP OUT OF THIS TOMORROW
@@ -56,8 +59,9 @@ public class autoBlue extends robot
 
         placeBlock();
 
+        intakeLeft.setPower(1);
+        intakeRight.setPower(-1);
         sleep(1000);
-
         forward(0.6);
         sleep(1000);
         forward(0);
@@ -65,9 +69,7 @@ public class autoBlue extends robot
         forward(-0.4);
         sleep(1500);
         forward(0);
-        intakeLeft.setPower(1);
-        intakeRight.setPower(-1);
-        sleep(1000);
+
         intakeLeft.setPower(0);
         intakeRight.setPower(0);
 
