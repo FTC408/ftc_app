@@ -21,9 +21,9 @@ import com.qualcomm.robotcore.util.Range;
 public class teleop408 extends robot {
 
     Boolean upDownClaw = true;//Will assist in the operations to raise the claw up or down
-    Boolean inOutClaw = false;//Will assist in the operations to open or close the claw
+    Boolean inOutClaw = true;//Will assist in the operations to open or close the claw
 
-    double clawPos = 0;
+    double clawPos = 0.5;
 
     @Override
     public void runOpMode() throws InterruptedException

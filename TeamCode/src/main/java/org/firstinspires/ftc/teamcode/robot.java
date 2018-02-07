@@ -389,6 +389,7 @@ public class robot extends LinearOpMode
         telemetry.addData("Right Front Motor Position: ", rightDriveF.getCurrentPosition());
         telemetry.addData("Left Back Motor Position: ", leftDriveB.getCurrentPosition());
         telemetry.addData("Left Front Motor Position: ", leftDriveF.getCurrentPosition());
+        telemetry.addData("Up Down Servo Position:", clawPivot.getPosition());
         //telemetry.addData("Elevator Position: ", elevator.getCurrentPosition());
         telemetry.addData("", "");
         telemetry.update();

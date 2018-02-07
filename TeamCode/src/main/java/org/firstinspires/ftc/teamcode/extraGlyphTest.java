@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 /**
  * Created by Austin on 10/25/2017.
  */
-@Autonomous(name= "Auto Blue", group = "Auto")
+@Autonomous(name= "Glyphs", group = "Auto")
 //@Disabled
 public class extraGlyphTest extends robot
 {
@@ -23,21 +23,26 @@ public class extraGlyphTest extends robot
 
         intakeLeft.setPower(-1);
         intakeRight.setPower(1);
-        forward(1, 3000);
-        turn(0.5, 30);
-        turn(0.5, -30);
-        forward(-1, 1500);
-        turn(0.6, 180);
-        forward(0.5, 1000);
+        forward(1, 1200);
+        sleep(500);
+        turn(1, 30);
+        sleep(500);
+        turn(1, -30);
+        sleep(500);
+        forward(-1, 500);
+        sleep(500);
+        turn(1, 120);
+        sleep(200);
+        forward(1, 500);
         intakeLeft.setPower(1);
         intakeRight.setPower(-1);
-        sleep(1000);
-        forward(0.6);
-        sleep(1000);
+        sleep(500);
+        forward(1);
+        sleep(500);
         forward(0);
-        sleep(1000);
-        forward(-0.4);
-        sleep(1500);
+        sleep(200);
+        forward(-1);
+        sleep(500);
         forward(0);
 
         intakeLeft.setPower(0);
