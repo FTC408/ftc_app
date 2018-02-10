@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 /**
  * Created by Austin on 10/25/2017.
  */
 @Autonomous(name= "Glyphs", group = "Auto")
-//@Disabled
+@Disabled
 public class extraGlyphTest extends robot
 {
 

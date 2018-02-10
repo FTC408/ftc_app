@@ -87,6 +87,12 @@ public class teleop408 extends robot {
             }
         }
 
+        if (gamepad2.y)
+        {
+            clawPos = 0.5;
+            clawPivot.setPosition(clawPos);
+        }
+
         if (gamepad2.dpad_up)//0
         {
             clawPos = clawPos - 0.05;

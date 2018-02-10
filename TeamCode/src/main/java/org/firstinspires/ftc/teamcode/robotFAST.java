@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -12,7 +11,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
@@ -21,11 +19,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * Created by Austin on 11/14/2017.
  */
 
-public class robot extends LinearOpMode
+public class robotFAST extends LinearOpMode
 {
     DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator, elevator2, arm;
-    ColorSensor color, glyphReader;
-    DistanceSensor sensorDistance, glyphReaderDistance;
+    ColorSensor color;
+    DistanceSensor sensorDistance;
     CRServo intakeRight, intakeLeft;
     Servo jewel, clawPivot, claw, jewelSwivel;
 
@@ -35,7 +33,7 @@ public class robot extends LinearOpMode
     //These are the values in mm of the close middle and far positions for placing the block from the starting point
     //0 = close, 1 = middle, 2 = far, 3 = nothing
     int[] cipherBLUE = {20, 190, 400, 0};
-    int[] cipherRED = {430, 200, 0, 0};
+    int[] cipherRED = {500, 200, 0, 0};
 
     public static final String TAG = "Vuforia VuMark Sample";
     OpenGLMatrix lastLocation = null;
@@ -46,7 +44,7 @@ public class robot extends LinearOpMode
      */
     VuforiaLocalizer vuforia;
 
-    //Initializes robot
+
     public void init(int zed){
         //Initilization Procedures
         // Configuration in the phone, this allows the motors to control physical objects that the phone is connected to
@@ -63,8 +61,6 @@ public class robot extends LinearOpMode
 
         clawPivot = hardwareMap.servo.get("clawPivot");
         claw = hardwareMap.servo.get("claw");
-
-
 
         jewel = hardwareMap.servo.get("jewel");
         jewelSwivel = hardwareMap.servo.get("jewel_swivel");
@@ -83,13 +79,10 @@ public class robot extends LinearOpMode
 
         // get a reference to the color sensor
         color = hardwareMap.get(ColorSensor.class, "colorLeft");
-        glyphReader = hardwareMap.get(ColorSensor.class, "glyphReader");
 
         // get a reference to the distance sensor that shares the same name.
         sensorDistance = hardwareMap.get(DistanceSensor.class, "colorLeft");
-        glyphReaderDistance =hardwareMap.get(DistanceSensor.class, "glyphReader");
         color.enableLed(false);
-        glyphReader.enableLed(false);
 
         //Configures the motors to automatically brake when they have no input
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -98,7 +91,7 @@ public class robot extends LinearOpMode
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
-    //Configures image tracking
+
     public VuforiaTrackable relicTemplate()
     {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -118,7 +111,7 @@ public class robot extends LinearOpMode
 
         return relicTemplate;
     }
-    //Uses image tracking in order to determine which position in the crypto box to place into
+
     //0= left, 1= center, 2= right, 3= unknown
     public int position()//You need to start from the left side of the cryptobox for this to work
     {
@@ -143,7 +136,7 @@ public class robot extends LinearOpMode
                 telemetry.update();
                 return 0;
             }
-            else if (i == 3500)
+            else if (i == 5000)
             {
                 break;
             }else {
@@ -167,7 +160,49 @@ public class robot extends LinearOpMode
         intakeLeft.setPower(0);
         intakeRight.setPower(0);
     }
-    //Hits off the jewel
+
+    public void extraGlyph(boolean red)
+    {
+        intakeLeft.setPower(-1);
+        intakeRight.setPower(1);
+        forward(1);
+        sleep(2000);
+        forward(0);
+        sleep(500);
+        turn(1, 30);
+        sleep(500);
+        turn(1, -30);
+        sleep(500);
+        forward(-1, 500);
+        sleep(500);
+
+        if (red) {
+
+            turn(1, 90);
+            sleep(200);
+            forward(1, 500);
+        }
+        else
+        {
+            turn(-1, 120);
+            sleep(200);
+            forward(1, 500);
+        }
+        intakeLeft.setPower(1);
+        intakeRight.setPower(-1);
+        sleep(500);
+        forward(1);
+        sleep(500);
+        forward(0);
+        sleep(200);
+        forward(-1);
+        sleep(500);
+        forward(0);
+
+        intakeLeft.setPower(0);
+        intakeRight.setPower(0);
+    }
+
     //If red == true, on red side, else on blue side
       public void jewel(boolean red)
     {
@@ -179,21 +214,21 @@ public class robot extends LinearOpMode
             if (ColorTest(color) == 1)
             {
                 jewelSwivel.setPosition(leftPosition);
-                sleep(1000);
+                sleep(300);
                 jewelSwivel.setPosition(straightPosition);
-                sleep(1000);
+                sleep(300);
                 jewel.setPosition(upPosition);
-                sleep(1000);
+                sleep(300);
             }
             //If blue
             else if (ColorTest(color) == 0)
             {
                 jewelSwivel.setPosition(rightPosition);
-                sleep(1000);
+                sleep(300);
                 jewelSwivel.setPosition(straightPosition);
-                sleep(1000);
+                sleep(300);
                 jewel.setPosition(upPosition);
-                sleep(1000);
+                sleep(300);
             }
             //If none
             else if (ColorTest(color) == 0.5)
@@ -201,7 +236,7 @@ public class robot extends LinearOpMode
                 //Skip selective action
             }
             jewel.setPosition(upPosition);
-            sleep(1000);
+            sleep(300);
         }
         else //Wanted Blue
         {
@@ -211,21 +246,21 @@ public class robot extends LinearOpMode
             if (ColorTest(color) == 1)
             {
                 jewelSwivel.setPosition(rightPosition);
-                sleep(1000);
+                sleep(300);
                 jewelSwivel.setPosition(straightPosition);
-                sleep(1000);
+                sleep(300);
                 jewel.setPosition(upPosition);
-                sleep(1000);
+                sleep(300);
             }
             //If blue
             else if (ColorTest(color) == 0)
             {
                 jewelSwivel.setPosition(leftPosition);
-                sleep(1000);
+                sleep(300);
                 jewelSwivel.setPosition(straightPosition);
-                sleep(1000);
+                sleep(300);
                 jewel.setPosition(upPosition);
-                sleep(1000);
+                sleep(300);
             }
             //If none
             else if (ColorTest(color) == 0.5)
@@ -233,10 +268,9 @@ public class robot extends LinearOpMode
                 //Skip selective action
             }
             jewel.setPosition(upPosition);
-            sleep(1000);
+            sleep(300);
         }
     }
-    //Tests the color of the ball
     //Returns 1 if red, 0 if blue, 0.5 if neither
     public double ColorTest(ColorSensor color)
     {
@@ -251,25 +285,24 @@ public class robot extends LinearOpMode
         return 0.5;
     }
 
-    //Controls left drive train
     public void leftPower(double power)
     {
         leftDriveB.setPower(power);
         leftDriveF.setPower(power);
     }
-    //Controls right drive train
+
     public void rightPower(double power)
     {
         rightDriveF.setPower(power);
         rightDriveB.setPower(power);
     }
-    //Goes forward
+
     public void forward(double power)
     {
         leftPower(-power);
         rightPower(-power);
     }
-    //Goes forward a specific amount
+
     public void forward(double power, int mm)
     {
         int pos = leftDriveF.getCurrentPosition();
@@ -288,7 +321,7 @@ public class robot extends LinearOpMode
         }
         forward(0);
     }
-    //Turns a specific angle
+
     //Positive Degrees to the right, negative to the left
     public void turn(double power, int degrees)
     {
@@ -325,7 +358,7 @@ public class robot extends LinearOpMode
         forward(0);
     }
 
-    //Positive power is to the right, negative to the left. Strafes a specific distance
+    //Positive power is to the right, negative to the left
     public void strafe(double power, int mm)
     {
         int pos = leftDriveF.getCurrentPosition();
@@ -346,7 +379,6 @@ public class robot extends LinearOpMode
         forward(0);
     }
 
-    //Strafes right
     public void strafeRight(double power)
     {
         leftDriveF.setPower(-power);
@@ -355,7 +387,6 @@ public class robot extends LinearOpMode
         rightDriveB.setPower(power);
     }
 
-    //Strafes left
     public void strafeLeft(double power)
     {
         leftDriveF.setPower(power);
@@ -364,19 +395,17 @@ public class robot extends LinearOpMode
         rightDriveB.setPower(-power);
     }
 
-    //Turns right
     public void right(double power)
     {
         leftPower(power);
         rightPower(-power);
     }
-    //Turns left
     public void left(double power)
     {
         leftPower(-power);
         rightPower(power);
     }
-// converts ticks for the encoders to mm
+
     public double tickstomm(int ticks){
 
         double mm = (ticks * (2));
@@ -396,21 +425,12 @@ public class robot extends LinearOpMode
     public void telemetry ()
     {
         //get position
-       /* telemetry.addData("Motor Positions", "");
+        telemetry.addData("Motor Positions", "");
         telemetry.addData("Right Back Motor Position: ", rightDriveB.getCurrentPosition());
         telemetry.addData("Right Front Motor Position: ", rightDriveF.getCurrentPosition());
         telemetry.addData("Left Back Motor Position: ", leftDriveB.getCurrentPosition());
         telemetry.addData("Left Front Motor Position: ", leftDriveF.getCurrentPosition());
-        telemetry.addData("Up Down Servo Position:", clawPivot.getPosition());*/
-
-        //telemetry.addData("Color", glyphReader.red());
-
-        if( glyphReader.red() > 155)//This is a threshold that the color sensor has to get past in order to say there is a block in the chamber
-        {
-            telemetry.addData("YOU GOT THE BLOCK!!!!!!!!!!!!!!!!!", "");//This uses a color sensor in order to
-            //Indicate to the drivers whether or not we grab a block in teleop.
-        }
-
+        telemetry.addData("Up Down Servo Position:", clawPivot.getPosition());
         //telemetry.addData("Elevator Position: ", elevator.getCurrentPosition());
         telemetry.addData("", "");
         telemetry.update();

@@ -2,24 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
  * Created by Austin on 10/25/2017.
  */
-@Autonomous(name= "Auto Blue", group = "Auto")
-//@Disabled
-public class autoBlue extends robot
+@Autonomous(name= "Auto Blue FAST", group = "Auto")
+@Disabled
+public class autoBlueFAST extends robotFAST
 {
 
 
@@ -37,23 +26,19 @@ public class autoBlue extends robot
         int position = position(); //Reads the cipher
         jewel(true); //Knocks the jewel off the platform
 
-        forward(-0.3, (int)(25.5*25.5));
+        forward(-0.5, (int)(25.5*25.5));
 
         sleep(500);
 
-        turn(0.3, 165);
+        turn(0.5, 165);
 
         forward(0);
         sleep(500);
 
-        forward(0.5, 70);
-
-        strafe(0.5, cipherBLUE[position] +  ((int)(4*25.4)));//Strafe into the correct ciphered position with the glyph, if the cipher was not read, go to position 0
+        strafe(0.5, cipherBLUE[position] +  ((int)(2*25.4)));//Strafe into the correct ciphered position with the glyph, if the cipher was not read, go to position 0
 
         forward(0);
         sleep(500);
-
-        placeBlock();
 
         intakeLeft.setPower(1);
         intakeRight.setPower(-1);
@@ -63,7 +48,7 @@ public class autoBlue extends robot
         forward(0);
         sleep(1000);
         forward(-0.4);
-        sleep(1500);
+        sleep(1200);
         forward(0);
 
         intakeLeft.setPower(0);
