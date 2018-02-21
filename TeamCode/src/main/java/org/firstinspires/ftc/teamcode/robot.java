@@ -27,14 +27,23 @@ public class robot extends LinearOpMode
     ColorSensor color, glyphReader;
     DistanceSensor sensorDistance, glyphReaderDistance;
     CRServo intakeRight, intakeLeft;
-    Servo jewel, clawPivot, claw, jewelSwivel;
+    Servo jewel, clawPivot, claw, jewelSwivel, flap;
 
     double downPosition = 1, upPosition = 0.5;
     double straightPosition = 0.15, rightPosition = 0, leftPosition = 0.8;
 
     //These are the values in mm of the close middle and far positions for placing the block from the starting point
     //0 = close, 1 = middle, 2 = far, 3 = nothing
-    int[] cipherBLUE = {20, 190, 400, 0};
+    int[] cipherBLUE = {0, 170, 350
+
+
+
+
+
+
+
+
+            , 0};
     int[] cipherRED = {430, 200, 0, 0};
 
     public static final String TAG = "Vuforia VuMark Sample";
@@ -68,6 +77,7 @@ public class robot extends LinearOpMode
 
         jewel = hardwareMap.servo.get("jewel");
         jewelSwivel = hardwareMap.servo.get("jewel_swivel");
+        flap = hardwareMap.servo.get("flap");
 
         rightDriveB.setDirection(DcMotorSimple.Direction.FORWARD);//ON LEFT SIDE FOR WHATEVER REASON
         rightDriveF.setDirection(DcMotorSimple.Direction.FORWARD);

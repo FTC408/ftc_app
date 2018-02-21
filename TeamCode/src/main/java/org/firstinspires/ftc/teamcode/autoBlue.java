@@ -46,12 +46,21 @@ public class autoBlue extends robot
         forward(0);
         sleep(500);
 
-        forward(0.5, 70);
+        forward(0.5, 40);
 
-        strafe(0.5, cipherBLUE[position] +  ((int)(4*25.4)));//Strafe into the correct ciphered position with the glyph, if the cipher was not read, go to position 0
+        sleep(500);
+
+        strafe(0.5, cipherBLUE[position] +  ((int)(1*25.4)));//Strafe into the correct ciphered position with the glyph, if the cipher was not read, go to position 0
 
         forward(0);
         sleep(500);
+
+        if (position == 2)
+        {
+            forward(0.4, 50);
+            forward(0);
+            sleep(500);
+        }
 
         placeBlock();
 
@@ -63,7 +72,7 @@ public class autoBlue extends robot
         forward(0);
         sleep(1000);
         forward(-0.4);
-        sleep(1500);
+        sleep(1100);
         forward(0);
 
         intakeLeft.setPower(0);

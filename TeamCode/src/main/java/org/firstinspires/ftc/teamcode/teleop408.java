@@ -34,6 +34,7 @@ public class teleop408 extends robot {
 
         while(opModeIsActive())
         {
+            flap.setPosition(0.15);
             modifiedMecanum();
             elevatorControl();
             winchControl();
