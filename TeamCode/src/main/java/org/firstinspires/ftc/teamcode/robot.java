@@ -23,21 +23,22 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 public class robot extends LinearOpMode
 {
-    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator, elevator2, arm;
-    ColorSensor color, glyphReader;
+    DcMotor leftDriveF, leftDriveB, rightDriveF, rightDriveB, elevator, elevator2, arm, flippyWinch, flippyFlip;
+    ColorSensor color; // glyphReader;
     DistanceSensor sensorDistance, glyphReaderDistance;
     CRServo intakeRight, intakeLeft;
-    Servo jewel, clawPivot, claw, jewelSwivel, flap;
+    Servo jewel, clawPivot, claw, jewelSwivel, flap, flapBL, flapBR, flapTR, flapTL;
 
     double downPosition = 1, upPosition = 0.5;
-    double straightPosition = 0.2, rightPosition = 0, leftPosition = 0.8;
+    double straightPosition = 0.19, rightPosition = 0, leftPosition = 0.8;
 
     //These are the values in mm of the close middle and far positions for placing the block from the starting point
     //0 = close, 1 = middle, 2 = far, 3 = nothing
-    int[] cipherBLUE = {0, 190, 350, 0};
-    int[] cipherRED = {430, 200, 0, 0};
-    int[] cipherBLUEBACK = {0, 300, 545, 0};
-    int[] cipherREDBACK = {430, 200, 0, 0};
+    //Strafing for each program to the cryptobox
+    int[] cipherBLUE = {50, 300, 545, 50};
+    int[] cipherRED = {500, 270, 10, 10};
+    int[] cipherBLUEBACK = {40, 320, 525, 0};
+    int[] cipherREDBACK = {500, 270, 10, 270};
 
     public static final String TAG = "Vuforia VuMark Sample";
     OpenGLMatrix lastLocation = null;
@@ -56,12 +57,24 @@ public class robot extends LinearOpMode
         leftDriveB = hardwareMap.dcMotor.get("leftDriveB");
         rightDriveF = hardwareMap.dcMotor.get("rightDriveF");
         rightDriveB = hardwareMap.dcMotor.get("rightDriveB");
-        elevator =  hardwareMap.dcMotor.get("elevator");
-        elevator2 = hardwareMap.dcMotor.get("elevator2");
+        //elevator =  hardwareMap.dcMotor.get("elevator");
+        //elevator2 = hardwareMap.dcMotor.get("elevator2");
         arm = hardwareMap.dcMotor.get("arm");
 
-        intakeRight = hardwareMap.crservo.get("intakeRight");
-        intakeLeft = hardwareMap.crservo.get("intakeLeft");
+        flippyWinch = hardwareMap.dcMotor.get("flippyWinch");
+        flippyFlip = hardwareMap.dcMotor.get("flippyFlip");
+
+        flippyWinch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        flippyFlip.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        flapBL = hardwareMap.servo.get("flapBL");
+        flapBR = hardwareMap.servo.get("flapBR");
+        flapTR = hardwareMap.servo.get("flapTR");
+        flapTL = hardwareMap.servo.get("flapTL");
+
+
+        //intakeRight = hardwareMap.crservo.get("intakeRight");
+        //intakeLeft = hardwareMap.crservo.get("intakeLeft");
 
         clawPivot = hardwareMap.servo.get("clawPivot");
         claw = hardwareMap.servo.get("claw");
@@ -70,7 +83,7 @@ public class robot extends LinearOpMode
 
         jewel = hardwareMap.servo.get("jewel");
         jewelSwivel = hardwareMap.servo.get("jewel_swivel");
-        flap = hardwareMap.servo.get("flap");
+        //flap = hardwareMap.servo.get("flap");
 
         rightDriveB.setDirection(DcMotorSimple.Direction.FORWARD);//ON LEFT SIDE FOR WHATEVER REASON
         rightDriveF.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -86,13 +99,13 @@ public class robot extends LinearOpMode
 
         // get a reference to the color sensor
         color = hardwareMap.get(ColorSensor.class, "colorLeft");
-        glyphReader = hardwareMap.get(ColorSensor.class, "glyphReader");
+        //glyphReader = hardwareMap.get(ColorSensor.class, "glyphReader");
 
         // get a reference to the distance sensor that shares the same name.
         sensorDistance = hardwareMap.get(DistanceSensor.class, "colorLeft");
-        glyphReaderDistance =hardwareMap.get(DistanceSensor.class, "glyphReader");
+        //glyphReaderDistance =hardwareMap.get(DistanceSensor.class, "glyphReader");
         color.enableLed(false);
-        glyphReader.enableLed(false);
+        //glyphReader.enableLed(false);
 
         //Configures the motors to automatically brake when they have no input
         leftDriveF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -164,12 +177,36 @@ public class robot extends LinearOpMode
     //Code for placing a block
     public void placeBlock()
     {
-        intakeLeft.setPower(1);
-        intakeRight.setPower(-1);
-        sleep(1500);
-        intakeLeft.setPower(0);
-        intakeRight.setPower(0);
+        forward(0.5);
+        sleep(1000);
+        forward(0);
+        openBottom(open);
+        openBottom(open);
+        sleep(500);
+        forward(-0.5);
+        sleep(500);
+        forward(1);
+        sleep(1000);
+        forward(0);
+        sleep(200);
+        forward(-1);
+        sleep(700);
+        forward(0);
     }
+
+    double close = 0.3, open = 0.5, openFull = 1;
+
+    public void openTop(double amount)
+    {
+        flapTR.setPosition(amount);
+        flapTL.setPosition(1 - amount);
+    }
+    public void openBottom(double amount)
+    {
+        flapBR.setPosition(amount);
+        flapBL.setPosition(1 - amount);
+    }
+
     //Hits off the jewel
     //If red == true, on red side, else on blue side
       public void jewel(boolean red)
@@ -408,15 +445,15 @@ public class robot extends LinearOpMode
 
         //telemetry.addData("Color", glyphReader.red());
 
-        if( glyphReader.red() > 155)//This is a threshold that the color sensor has to get past in order to say there is a block in the chamber
+       /* if( glyphReader.red() > 155)//This is a threshold that the color sensor has to get past in order to say there is a block in the chamber
         {
             telemetry.addData("YOU GOT THE BLOCK!!!!!!!!!!!!!!!!!", "");//This uses a color sensor in order to
             //Indicate to the drivers whether or not we grab a block in teleop.
         }
-
+*/
         //telemetry.addData("Elevator Position: ", elevator.getCurrentPosition());
-        telemetry.addData("", "");
-        telemetry.update();
+        //telemetry.addData("", "");
+        //telemetry.update();
 
         //get power
         /*telemetry.addData("Motor Powers", "");

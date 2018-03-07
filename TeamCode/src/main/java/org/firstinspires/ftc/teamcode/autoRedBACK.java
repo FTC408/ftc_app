@@ -17,6 +17,11 @@ public class autoRedBACK extends robot
         jewel.setPosition(upPosition);
         waitForStart();
 
+        openBottom(close);
+        sleep(200);
+        flippyWinch.setPower(1);
+        sleep(700);
+        flippyWinch.setPower(0);
         jewel(false); //Knocks the jewel off the platform
 
         int position = position(); //Reads the cipher
@@ -24,17 +29,30 @@ public class autoRedBACK extends robot
         forward(0.3, (int) 25.4* 29);//Towards Cryptobox
 
         forward(0);
-        sleep(1000);
+        sleep(500);
 
-        turn(1, -90);
+        turn(0.3, -90);
+        forward(0);
+        sleep(500);
+
+        forward(-0.5);
+        sleep(500);
+        forward(0);
+        sleep(500);
+
+        if (position == 0 || position == 3)
+        {
+            strafe(-0.3, cipherREDBACK[position] + ((int) (0)));//Strafe into the correct ciphered position with the glyph, if the cipher was not read, go to position 0
+
+        }
+        else {
+
+            strafe(-0.3, cipherREDBACK[position] + ((int) (4 * 25.4)));//Strafe into the correct ciphered position with the glyph, if the cipher was not read, go to position 0
+
+        }
 
         forward(0);
-        sleep(1000);
-
-        strafe(-0.3, cipherREDBACK[position] +  ((int)(4*25.4)));//Strafe into the correct ciphered position with the glyph, if the cipher was not read, go to position 0
-
-        forward(0);
-        sleep(1000);
+        sleep(500);
 
         //turn(0.5, 20);
 
@@ -45,20 +63,15 @@ public class autoRedBACK extends robot
             forward(0);
         }*/
 
-        placeBlock();
-        intakeLeft.setPower(1);
-        intakeRight.setPower(-1);
+        flippyWinch.setPower(-1);
+        sleep(100);
+        flippyWinch.setPower(0);
+        sleep(500);
 
-        forward(0.6);
-        sleep(1000);
+        placeBlock();
+
         forward(0);
-        sleep(1000);
-        forward(-0.4);
-        sleep(1000);
-        forward(0);
-        sleep(1000);
-        intakeLeft.setPower(0);
-        intakeRight.setPower(0);
+
 
 
 

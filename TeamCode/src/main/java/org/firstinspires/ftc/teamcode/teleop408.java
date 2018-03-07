@@ -23,6 +23,11 @@ public class teleop408 extends robot {
     Boolean upDownClaw = true;//Will assist in the operations to raise the claw up or down
     Boolean inOutClaw = true;//Will assist in the operations to open or close the claw
 
+    boolean openCloseTop = false; //False = open
+    boolean openCloseBottom = false; //False = open
+
+    boolean flippyCW = true;
+
     double clawPos = 0.5;
 
     @Override
@@ -34,12 +39,13 @@ public class teleop408 extends robot {
 
         while(opModeIsActive())
         {
-            flap.setPosition(0.15);
+            //flap.setPosition(0.15);
             modifiedMecanum();
-            elevatorControl();
+            //elevatorControl();
             winchControl();
             clawControl();
-            intakeControl();
+            //intakeControl();
+            newIntakeControl();
 
             if(gamepad1.b)
             {
@@ -53,9 +59,162 @@ public class teleop408 extends robot {
             }
 
 
-            telemetry();
+            //telemetry();
         }
 
+
+    }
+
+    public void newIntakeControl()
+    {
+        int CWposition = 130;
+        int CCWposition = 0;
+        int deltaPosition = CWposition - CCWposition;
+
+
+
+        if(Math.abs(gamepad2.left_stick_y) > 0.1 )
+        {
+            flippyWinch.setPower(-1 * gamepad2.left_stick_y);
+        }
+        else
+        {
+            flippyWinch.setPower(0);
+        }
+
+        if (gamepad2.left_trigger > 0.2)
+        {
+            while (gamepad2.left_trigger > 0.2)
+            {
+                if (openCloseTop == false) //If open
+                {
+                    //Close top
+                    flapTR.setPosition(0.1);
+                    flapTL.setPosition(0.9);
+                }
+                else //If closed
+                {
+                    //Open top
+                    flapTR.setPosition(0.5);
+                    flapTL.setPosition(0.5);
+                }
+
+                //modifiedMecanum();
+            }
+            openCloseTop = !openCloseTop;
+        }
+        if (gamepad2.right_trigger > 0.2)
+        {
+            while (gamepad2.right_trigger > 0.2)
+            {
+                if (openCloseBottom == false) //If open
+                {
+                    //Close bottom
+                    flapBR.setPosition(0.1);
+                    flapBL.setPosition(0.9);
+                }
+                else //If closed
+                {
+                    //Open bottom
+                    flapBR.setPosition(0.5);
+                    flapBL.setPosition(0.5);
+                }
+
+                //modifiedMecanum();
+            }
+            openCloseBottom = !openCloseBottom;
+        }
+        if (gamepad2.b)
+        {
+            flapBL.setPosition(0);
+            flapBR.setPosition(1);
+            flapTL.setPosition(0);
+            flapTR.setPosition(1);
+        }
+
+        /*if (gamepad2.left_bumper)
+        {
+            //Open top
+            flapTR.setPosition(0.5);
+            flapTL.setPosition(0.5);
+        }
+        if (gamepad2.right_bumper)
+        {
+            //Open Bottom
+            flapBR.setPosition(0.5);
+            flapBL.setPosition(0.5);
+        }
+        if (gamepad2.left_trigger > 0.2)
+        {
+            //Close Top
+            flapTR.setPosition(0.3);
+            flapTL.setPosition(0.7);
+        }
+        if (gamepad2.right_trigger > 0.2)
+        {
+            //Close Bottom
+            flapBR.setPosition(0.3);
+            flapBL.setPosition(0.7);
+        }*/
+
+        if (gamepad2.dpad_left)
+        {
+            flippyFlip.setPower(0.35);
+            telemetry.addData("Flippy Position negative Power", flippyFlip.getCurrentPosition());
+            telemetry.update();
+        }
+        else
+        {
+            flippyFlip.setPower(0);
+        }
+        //inc as cW
+        if (gamepad2.dpad_right)
+        {
+            flippyFlip.setPower(-0.35);
+            telemetry.addData("Flippy Position Positive Power", flippyFlip.getCurrentPosition());
+            telemetry.update();
+        }
+        else
+        {
+            flippyFlip.setPower(0);
+        }
+
+        if (gamepad2.x)
+        {
+            while (gamepad2.x)
+            {
+                if (flippyCW == true)
+                {
+                    //Goes CCW
+                    int pos = flippyFlip.getCurrentPosition();
+                    int delta = pos - deltaPosition;
+                    while (pos > delta)
+                    {
+                        flippyFlip.setPower(-0.5);
+                        pos = flippyFlip.getCurrentPosition();
+                        modifiedMecanum();
+                    }
+                    flippyFlip.setPower(0);
+                }
+                else
+                {
+                    //Goes clockwise
+                    int pos = flippyFlip.getCurrentPosition();
+                    int delta = pos + deltaPosition;
+                    while (pos < delta)
+                    {
+                        flippyFlip.setPower(0.5);
+                        pos = flippyFlip.getCurrentPosition();
+                        modifiedMecanum();
+                    }
+                    flippyFlip.setPower(0);
+                }
+                modifiedMecanum();
+            }
+            flippyCW = !flippyCW;
+
+
+        }
 
     }
 
