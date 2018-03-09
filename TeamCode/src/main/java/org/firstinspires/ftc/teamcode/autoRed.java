@@ -32,7 +32,7 @@ public class autoRed extends robot
 
         int position = position(); //Reads the cipher
 
-        forward(0.3, (int) 25.4* 27);//Towards Cryptobox
+        forward(0.3, (int) 25.4* 25);//Towards Cryptobox
 
         forward(0);
         sleep(1000);

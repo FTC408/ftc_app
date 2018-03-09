@@ -29,16 +29,16 @@ public class autoRedBACK extends robot
         forward(0.3, (int) 25.4* 29);//Towards Cryptobox
 
         forward(0);
-        sleep(500);
+        sleep(200);
 
         turn(0.3, -90);
         forward(0);
-        sleep(500);
+        sleep(200);
 
         forward(-0.5);
         sleep(500);
         forward(0);
-        sleep(500);
+        sleep(200);
 
         if (position == 0 || position == 3)
         {
@@ -52,7 +52,7 @@ public class autoRedBACK extends robot
         }
 
         forward(0);
-        sleep(500);
+        sleep(200);
 
         //turn(0.5, 20);
 

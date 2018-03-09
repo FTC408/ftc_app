@@ -35,10 +35,10 @@ public class robot extends LinearOpMode
     //These are the values in mm of the close middle and far positions for placing the block from the starting point
     //0 = close, 1 = middle, 2 = far, 3 = nothing
     //Strafing for each program to the cryptobox
-    int[] cipherBLUE = {50, 300, 545, 50};
-    int[] cipherRED = {500, 270, 10, 10};
+    int[] cipherBLUE = {50, 270, 545, 50};
+    int[] cipherRED = {650, 300, 10, 10};
     int[] cipherBLUEBACK = {40, 320, 525, 0};
-    int[] cipherREDBACK = {500, 270, 10, 270};
+    int[] cipherREDBACK = {480, 250, 10, 10};
 
     public static final String TAG = "Vuforia VuMark Sample";
     OpenGLMatrix lastLocation = null;
@@ -190,7 +190,7 @@ public class robot extends LinearOpMode
         forward(0);
         sleep(200);
         forward(-1);
-        sleep(700);
+        sleep(500);
         forward(0);
     }
 

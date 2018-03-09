@@ -47,7 +47,7 @@ public class autoBlue extends robot
 
         sleep(500);
 
-        turn(0.3, 165);
+        turn(0.3, 175);
 
         forward(0);
         sleep(200);
@@ -75,6 +75,13 @@ public class autoBlue extends robot
         sleep(100);
         flippyWinch.setPower(0);
         sleep(500);
+
+        if (position == 2)
+        {
+            forward(0.5);
+            sleep(500);
+            forward(0);
+        }
 
         placeBlock();
 
